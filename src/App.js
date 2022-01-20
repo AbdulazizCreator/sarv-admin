@@ -9,10 +9,11 @@ import NotFound from "./pages/NotFound";
 import { getCookie } from "./utils/cookies";
 import { TOKEN } from "./const/index";
 import Dashboard from "./pages/Dashboard";
-import LayOut from "./comps/Layout";
+import LayOut from "./comps/common/Layout";
 
 function App() {
   const isLoggedIn = getCookie(TOKEN);
+
   const pages = [
     {
       path: "dashboard",
