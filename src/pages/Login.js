@@ -19,8 +19,7 @@ import AssignmentIndOutlinedIcon from "@mui/icons-material/AssignmentIndOutlined
 import LoadingButton from "@mui/lab/LoadingButton";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import { pink } from "@mui/material/colors";
-// import FormHelperText from "@mui/material/FormHelperText";
+import FormHelperText from "@mui/material/FormHelperText";
 
 const Login = () => {
   const [values, setValues] = useState({
@@ -28,8 +27,14 @@ const Login = () => {
     password: "",
     showPassword: false,
   });
+  const [valid, setValid] = useState({ username: false, password: false });
   const [isLoading, setIsLoading] = useState(false);
   const handleChange = (prop) => (event) => {
+    if (!event.target.value) {
+      setValid({ ...valid, [prop]: true });
+    } else {
+      setValid({ ...valid, [prop]: false });
+    }
     setValues({ ...values, [prop]: event.target.value });
   };
 
@@ -46,16 +51,24 @@ const Login = () => {
 
   const login = () => {
     delete values.showPassword;
-    setIsLoading(true);
-    postData("login/", values)
-      .then((res) => {
-        setCookie(TOKEN, res.data.jwt);
-        window.location.href = "/";
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    if (!values.username) {
+      setValid({ ...valid, username: true });
+    } else if (!values.password) {
+      setValid({ ...valid, password: true });
+    } else {
+      setIsLoading(true);
+      postData("login/", values)
+        .then((res) => {
+          setCookie(TOKEN, res.data.jwt);
+          window.location.href = "/";
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
   };
+
+  console.log(valid);
   return (
     <Box>
       <Grid container className="login">
@@ -86,14 +99,14 @@ const Login = () => {
               sx={{ mb: 3 }}
             >
               <Avatar
-                sx={{ bgcolor: pink[500], width: "60px", height: "60px" }}
+                sx={{ bgcolor: "#1976d2", width: "60px", height: "60px" }}
               >
                 <AssignmentIndOutlinedIcon fontSize="large" />
               </Avatar>
-              <h2>Войти в систему</h2>
+              <h1>Войти в систему</h1>
             </Grid>
             <FormControl
-              error={false}
+              error={valid.username}
               sx={{ mb: 3 }}
               fullWidth
               variant="outlined"
@@ -111,9 +124,14 @@ const Login = () => {
                 }
                 label="Имя пользователя"
               />
+              {valid.username && (
+                <FormHelperText id="component-error-text">
+                  Не заполнено
+                </FormHelperText>
+              )}
             </FormControl>
             <FormControl
-              error={false}
+              error={valid.password}
               sx={{ mb: 3 }}
               fullWidth
               variant="outlined"
@@ -145,7 +163,11 @@ const Login = () => {
                 }
                 label="Пароль"
               />
-              {/* <FormHelperText id="component-error-text">Error</FormHelperText> */}
+              {valid.password && (
+                <FormHelperText id="component-error-text">
+                  Не заполнено
+                </FormHelperText>
+              )}
             </FormControl>
             <FormControlLabel
               control={
