@@ -1,0 +1,45 @@
+.login {
+  height: 100vh;
+}
+
+.login-img-box {
+  background-image: url('../static/images/login-img.svg');
+  background-repeat: no-repeat;
+  background-color: #fafafa;
+  -webkit-background-size: cover;
+  background-size: cover;
+  -webkit-background-position: center;
+  background-position: center;
+  h1 {
+    font-size: 40px;
+  }
+  h3 {
+    font-size: 30px;
+  }
+  h1, h3, p {
+    color: white;
+  }
+}
+
+.login-form {
+  margin-top: 24px;
+  margin-bottom: 24px;
+  margin-left: 32px;
+  margin-right: 32px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  justify-content: center;
+  -webkit-justify-content: center;
+  height: calc(100% - 48px);
+}
+
+@media screen and (max-width: 900px) {
+  .login-img-box > div {
+    display: none;
+  }
+} 

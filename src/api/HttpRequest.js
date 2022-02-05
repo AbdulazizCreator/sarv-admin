@@ -6,12 +6,12 @@ import { logout } from "../utils/logout";
 
 const host = API;
 
-export const HttpRequest = () => {
+export const HttpRequest = (config = null) => {
   const token = getCookie(TOKEN);
   const headers = {
     "X-Requested-With": "XMLHttpRequest",
     "Content-Type": "application/json; charset=utf-8",
-    Authorization: token ? `Bearer ${token}` : "",
+    Authorization: token ? `${token}` : "",
   };
 
   const axiosInstance = axios.create({
@@ -30,8 +30,13 @@ export const HttpRequest = () => {
 
         if (error.response.status !== 200) {
           if (error.response.status === 401) {
-            logout()
+            logout();
             message.error(error.response.data.message);
+            return Promise.reject(error);
+          }
+          if (error.response.status === 403) {
+            logout();
+            message.error(error.response.data.detail);
             return Promise.reject(error);
           }
           if (Array.isArray(errors)) {
@@ -50,4 +55,6 @@ export const HttpRequest = () => {
       return Promise.reject(error);
     }
   );
+
+  return axiosInstance(config);
 };
