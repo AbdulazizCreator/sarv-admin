@@ -10,6 +10,9 @@ import { getCookie } from "./utils/cookies";
 import { TOKEN } from "./const/index";
 import Dashboard from "./pages/Dashboard";
 import LayOut from "./comps/common/Layout";
+import DevicesAll from "./pages/DevicesAll";
+import DevicesLegal from "./pages/DevicesLegal";
+import DevicesPhysical from "./pages/DevicesPhysical";
 
 function App() {
   const isLoggedIn = getCookie(TOKEN);
@@ -18,6 +21,18 @@ function App() {
     {
       path: "dashboard",
       comp: Dashboard,
+    },
+    {
+      path: "devices",
+      comp: DevicesAll,
+    },
+    {
+      path: "devices/legal",
+      comp: DevicesLegal,
+    },
+    {
+      path: "devices/physical",
+      comp: DevicesPhysical,
     },
   ];
 

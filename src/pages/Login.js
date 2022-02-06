@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import "../style/login.scss";
 import { TOKEN } from "../const";
 import { setCookie } from "../utils/cookies";
 import { postData } from "./../api/common";
+import "../style/login.scss";
+// material ui components
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
@@ -29,6 +30,8 @@ const Login = () => {
   });
   const [valid, setValid] = useState({ username: false, password: false });
   const [isLoading, setIsLoading] = useState(false);
+
+  // handle form fields are valid or invalid 
   const handleChange = (prop) => (event) => {
     if (!event.target.value) {
       setValid({ ...valid, [prop]: true });
@@ -50,13 +53,15 @@ const Login = () => {
   };
 
   const login = () => {
-    delete values.showPassword;
+    // checking form fields are valid or invalid
     if (!values.username) {
       setValid({ ...valid, username: true });
     } else if (!values.password) {
       setValid({ ...valid, password: true });
     } else {
       setIsLoading(true);
+      delete values.showPassword;
+      // sending data for login 
       postData("login/", values)
         .then((res) => {
           setCookie(TOKEN, res.data.jwt);
@@ -68,7 +73,6 @@ const Login = () => {
     }
   };
 
-  console.log(valid);
   return (
     <Box>
       <Grid container className="login">

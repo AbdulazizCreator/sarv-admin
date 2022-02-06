@@ -1,0 +1,17 @@
+.navbar  {
+  min-height: 64px;
+  .active {
+    color: black;
+  }
+  span {
+    text-align: center;  
+    white-space:nowrap;
+  }
+}
+
+.navbar-drawer {
+  .active {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+}

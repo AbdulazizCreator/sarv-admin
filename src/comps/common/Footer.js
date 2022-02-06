@@ -1,11 +1,8 @@
 import React from 'react'
+import Container from "@mui/material/Container";
 
 const Footer = () => {
-  return (
-    <div>
-      Footer
-    </div>
-  )
+  return <Container maxWidth="xl">Footer</Container>;
 }
 
 export default Footer
