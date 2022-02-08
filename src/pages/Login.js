@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TOKEN } from "../const";
 import { setCookie } from "../utils/cookies";
-import { postData } from "./../api/common";
+// import { postData } from "./../api/common";
 import "../style/login.scss";
 // material ui components
 import Box from "@mui/material/Box";
@@ -31,7 +31,7 @@ const Login = () => {
   const [valid, setValid] = useState({ username: false, password: false });
   const [isLoading, setIsLoading] = useState(false);
 
-  // handle form fields are valid or invalid 
+  // handle form fields are valid or invalid
   const handleChange = (prop) => (event) => {
     if (!event.target.value) {
       setValid({ ...valid, [prop]: true });
@@ -61,15 +61,17 @@ const Login = () => {
     } else {
       setIsLoading(true);
       delete values.showPassword;
-      // sending data for login 
-      postData("login/", values)
-        .then((res) => {
-          setCookie(TOKEN, res.data.jwt);
-          window.location.href = "/";
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+      setCookie(TOKEN, "token");
+      window.location.href = "/";
+      // sending data for login
+      // postData("login/", values)
+      //   .then((res) => {
+      //     setCookie(TOKEN, res.data.jwt);
+      //     window.location.href = "/";
+      //   })
+      //   .finally(() => {
+      //     setIsLoading(false);
+      //   });
     }
   };
 
