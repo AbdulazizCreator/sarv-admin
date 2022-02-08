@@ -1,5 +1,5 @@
 import React from "react";
-import Footer from "./Footer";
+// import Footer from "./Footer";
 import Navbar from "./Navbar";
 
 const LayOut = ({ children }) => {
@@ -7,7 +7,7 @@ const LayOut = ({ children }) => {
     <div>
       <Navbar />
       {children}
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

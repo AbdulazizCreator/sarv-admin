@@ -1,11 +1,12 @@
-import React from 'react'
+import React from "react";
+import Container from "@mui/material/Container";
 
 const Dashboard = () => {
   return (
     <div>
-      Dashboard
+      <Container maxWidth="xl">Dashboard</Container>
     </div>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

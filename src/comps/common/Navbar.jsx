@@ -28,7 +28,6 @@ const pages = [
   { name: "Настройки", url: "/settings" },
   { name: "Журнал", url: "/list" },
 ];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const Navbar = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -52,27 +51,25 @@ const Navbar = () => {
     setDrawer(open);
   };
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: "white" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
             variant="h6"
             noWrap
             component="div"
-            sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
+            sx={{ mr: 2, display: { xs: "none", lg: "flex" }, color: "black" }}
           >
             SARF
           </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", lg: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={toggleDrawer(true)}
-              color="inherit"
-              sx={{ marginLeft: "-12px" }}
+              sx={{ marginLeft: "-12px", color: 'black' }}
             >
               <MenuIcon />
             </IconButton>
@@ -130,7 +127,7 @@ const Navbar = () => {
             variant="h6"
             noWrap
             component="div"
-            sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
+            sx={{ flexGrow: 1, display: { xs: "flex", lg: "none" } }}
           >
             LOGO
           </Typography>
@@ -140,7 +137,7 @@ const Navbar = () => {
               flexDirection: "row",
               padding: 0,
               flexGrow: 1,
-              display: { xs: "none", md: "flex" },
+              display: { xs: "none", lg: "flex" },
             }}
             className="navbar"
           >
@@ -158,9 +155,9 @@ const Navbar = () => {
           </List>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            <Tooltip title="Настройки" placement="bottom-end">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="SARV" src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
             <Menu
@@ -179,11 +176,18 @@ const Navbar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem
+                onClick={handleCloseUserMenu}
+                button
+                end
+                component={NavLink}
+                to="/profile"
+              >
+                <Typography textAlign="center">Профиль</Typography>
+              </MenuItem>
+              <MenuItem onClick={handleCloseUserMenu} button>
+                <Typography textAlign="center">Выйти</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
