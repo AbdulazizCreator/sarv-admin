@@ -16,16 +16,18 @@ const CheckboxList = () => {
     <Box>
       {list.map((box, index) => (
         <FormControlLabel
-          sx={{ backgroundColor: "#ddd", pr: "10px", mb: '10px' }}
+          sx={{ backgroundColor: "#ddd", pr: "5px", mb: "5px" }}
           key={index}
           control={
             <Checkbox
               sx={{
-                color: '',
+                color: "",
                 "&.Mui-checked": {
-                  color: 'black',
+                  color: "black",
                 },
+                padding: "3px"
               }}
+              size="small"
               defaultChecked
               onChange={handleChange}
               inputProps={{ "aria-label": "controlled" }}

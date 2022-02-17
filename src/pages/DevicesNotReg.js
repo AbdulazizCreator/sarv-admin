@@ -1,8 +1,8 @@
 import React from 'react';
 import CustomTable from "../comps/CustomTable";
 
-const DevicesPhysical = () => {
+const DevicesNotReg = () => {
   return <CustomTable />;
 };
 
-export default DevicesPhysical;
+export default DevicesNotReg;

@@ -1,7 +1,8 @@
 import React from "react";
+import CustomTable from "../comps/CustomTable";
 
 const DevicesLegal = () => {
-  return <div>DevicesLegal</div>;
+  return <CustomTable />;
 };
 
 export default DevicesLegal;

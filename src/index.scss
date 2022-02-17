@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow: scroll;
+  background-color: #fafafa;
+}
+
+.pagination {
+  li {
+    &:first-child button {
+      margin-left: 0;
+    }
+    &:last-child button {
+      margin-right: 0;
+    }
+  }
+}
+
+.tree-icon {
+  font-size: 30px !important;
+}

@@ -1,0 +1,11 @@
+export { default as Settings } from "./Settings";
+export { default as Statistics } from "./Statistics";
+export { default as UserList } from "./UserList";
+export { default as Dashboard } from "./Dashboard";
+export { default as DevicesAll } from "./DevicesAll";
+export { default as DevicesLegal } from "./DevicesLegal";
+export { default as DevicesPhysical } from "./DevicesPhysical";
+export { default as DevicesNotReg } from "./DevicesNotReg";
+export { default as Users } from "./Users";
+export { default as Login } from "./Login";
+export { default as NotFound } from "./NotFound";

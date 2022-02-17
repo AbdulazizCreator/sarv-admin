@@ -4,15 +4,23 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Login from "./pages/Login";
-import NotFound from "./pages/NotFound";
+import {
+  UserList,
+  Dashboard,
+  DevicesAll,
+  DevicesLegal,
+  DevicesPhysical,
+  DevicesNotReg,
+  Users,
+  Login,
+  NotFound,
+  Statistics,
+  Settings,
+} from "./pages";
 import { getCookie } from "./utils/cookies";
-import { TOKEN } from "./const/index";
-import Dashboard from "./pages/Dashboard";
+import { TOKEN } from "./const";
 import LayOut from "./comps/common/Layout";
-import DevicesAll from "./pages/DevicesAll";
-import DevicesLegal from "./pages/DevicesLegal";
-import DevicesPhysical from "./pages/DevicesPhysical";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const isLoggedIn = getCookie(TOKEN);
@@ -27,47 +35,70 @@ function App() {
       comp: DevicesAll,
     },
     {
-      path: "devices/legal",
+      path: "devices_legal",
       comp: DevicesLegal,
     },
     {
-      path: "devices/physical",
+      path: "devices_physical",
       comp: DevicesPhysical,
+    },
+    {
+      path: "devices_not_registered",
+      comp: DevicesNotReg,
+    },
+    {
+      path: "users",
+      comp: Users,
+    },
+    {
+      path: "userList",
+      comp: UserList,
+    },
+    {
+      path: "statistics",
+      comp: Statistics,
+    },
+    {
+      path: "settings",
+      comp: Settings,
     },
   ];
 
   return (
-    <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            isLoggedIn ? (
-              <Navigate replace to="dashboard" />
-            ) : (
-              <Navigate replace to="login" />
-            )
-          }
-        ></Route>
-        <Route path="login" element={<Login />} />
-        {isLoggedIn && (
-          <Route path="/">
-            {pages.map((page, index) => (
-              <Route
-                key={index}
-                path={page.path}
-                element={
-                  <LayOut>
-                    <page.comp />
-                  </LayOut>
-                }
-              />
-            ))}
-          </Route>
-        )}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </Router>
+    <>
+      <ToastContainer />
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              isLoggedIn ? (
+                <Navigate replace to="dashboard" />
+              ) : (
+                <Navigate replace to="login" />
+              )
+            }
+          ></Route>
+          <Route path="login" element={<Login />} />
+          {isLoggedIn && (
+            <Route path="/">
+              {pages.map((page, index) => (
+                <Route
+                  key={index}
+                  path={page.path}
+                  element={
+                    <LayOut>
+                      <page.comp />
+                    </LayOut>
+                  }
+                />
+              ))}
+            </Route>
+          )}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Router>
+    </>
   );
 }
 

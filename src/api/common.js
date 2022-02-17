@@ -1,10 +1,10 @@
 import { PGNTN_LIMIT } from "../const";
 import { HttpRequest } from "./HttpRequest";
 
-export const getAllDataWithPagination = (url, page, query) => {
+export const getAllDataWithPagination = (url, page) => {
   const config = {
     method: "GET",
-    url: `${url}?page=${page}&size=${PGNTN_LIMIT}`,
+    url: `${url}/?p=${page}&page_size=${PGNTN_LIMIT}`,
   };
   return HttpRequest(config);
 };

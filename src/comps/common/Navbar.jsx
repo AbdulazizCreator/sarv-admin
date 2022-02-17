@@ -20,13 +20,13 @@ import "../../style/navbar.scss";
 
 const pages = [
   { name: "Приборы (Все)", url: "/devices" },
-  { name: "Приборы (Юр)", url: "/devices/legal" },
-  { name: "Приборы (Физ)", url: "/devices/physical" },
-  { name: "Приборы (Не зарег)", url: "/devices/not_registered" },
+  { name: "Приборы (Юр)", url: "/devices_legal" },
+  { name: "Приборы (Физ)", url: "/devices_physical" },
+  { name: "Приборы (Не зарег)", url: "/devices_not_registered" },
   { name: "Пользователи", url: "/users" },
   { name: "Статистика", url: "/statistics" },
   { name: "Настройки", url: "/settings" },
-  { name: "Журнал", url: "/list" },
+  { name: "Журнал", url: "/userList" },
 ];
 
 const Navbar = () => {
@@ -69,7 +69,7 @@ const Navbar = () => {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={toggleDrawer(true)}
-              sx={{ marginLeft: "-12px", color: 'black' }}
+              sx={{ marginLeft: "-12px", color: "black" }}
             >
               <MenuIcon />
             </IconButton>
@@ -131,29 +131,34 @@ const Navbar = () => {
           >
             LOGO
           </Typography>
-
-          <List
+          <Box
             sx={{
               flexDirection: "row",
               padding: 0,
               flexGrow: 1,
               display: { xs: "none", lg: "flex" },
             }}
-            className="navbar"
           >
-            {pages.map((page, index) => (
-              <ListItem
-                button
-                end
-                component={NavLink}
-                to={page.url}
-                key={page.url}
-              >
-                <ListItemText primary={page.name} />
-              </ListItem>
-            ))}
-          </List>
-
+            <List
+              sx={{
+                padding: 0,
+                display: { xs: "none", lg: "flex" },
+              }}
+              className="navbar"
+            >
+              {pages.map((page, index) => (
+                <ListItem
+                  button
+                  end
+                  component={NavLink}
+                  to={page.url}
+                  key={page.url}
+                >
+                  <ListItemText primary={page.name} />
+                </ListItem>
+              ))}
+            </List>
+          </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Настройки" placement="bottom-end">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
