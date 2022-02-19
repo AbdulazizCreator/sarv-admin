@@ -5,7 +5,7 @@ const useDeleteDevice = (id, callback) => {
   const [deleteDialog, setDeleteDialog] = useState(false);
 
   const confirmDelete = () => {
-    deleteData(`device/${id}/`);
+    deleteData(`api/device/${id}/`);
     setDeleteDialog(false);
     callback();
   };

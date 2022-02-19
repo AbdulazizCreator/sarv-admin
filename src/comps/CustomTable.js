@@ -86,7 +86,7 @@ const CustomTable = (props) => {
     totalElements,
     isFetching,
     handlePaginationChange,
-  ] = usePaginationFetch("device", props.query || {}, changes);
+  ] = usePaginationFetch("api/device", props.query || {}, changes);
 
   const [
     showCols,

@@ -17,6 +17,8 @@ import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import "../../style/navbar.scss";
+import { deleteCookie } from './../../utils/cookies';
+import { TOKEN } from "../../const";
 
 const pages = [
   { name: "Приборы (Все)", url: "/devices" },
@@ -49,6 +51,11 @@ const Navbar = () => {
     }
 
     setDrawer(open);
+  };
+  const logout = () => {
+    handleCloseUserMenu();
+    deleteCookie(TOKEN);
+    window.location.href = "/";
   };
   return (
     <AppBar position="static" sx={{ backgroundColor: "white" }}>
@@ -190,7 +197,7 @@ const Navbar = () => {
               >
                 <Typography textAlign="center">Профиль</Typography>
               </MenuItem>
-              <MenuItem onClick={handleCloseUserMenu} button>
+              <MenuItem onClick={logout} button>
                 <Typography textAlign="center">Выйти</Typography>
               </MenuItem>
             </Menu>
