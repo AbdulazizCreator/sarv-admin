@@ -34,6 +34,7 @@ import useTableColumnOrder from "../hooks/useTableColumnOrder";
 import useEditDevice from "./../hooks/useEditDevice";
 import useDeleteDevice from "./../hooks/useDeleteDevice";
 import lan from "../const/languages/lan";
+import { useNavigate } from "react-router-dom";
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -64,7 +65,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderTop: "1px solid rgba(0, 0, 0, .125)",
 }));
 
-const CustomTable = () => {
+const CustomTable = (props) => {
   const cols = Object.keys(lan.tableColumns);
   const loc_cols =
     JSON.parse(localStorage.getItem(SHOW_COLS)) ||
@@ -77,14 +78,15 @@ const CustomTable = () => {
       )
     );
   const [open, setOpen] = useState(false);
-  const [changes] = useState(false);
+  const [selected, setSelected] = useState({});
+  const [changes, setChanges] = useState(false);
   const [
     devices,
     currentPage,
     totalElements,
     isFetching,
     handlePaginationChange,
-  ] = usePaginationFetch("device", [changes]);
+  ] = usePaginationFetch("device", props.query || {}, changes);
 
   const [
     showCols,
@@ -96,8 +98,12 @@ const CustomTable = () => {
     handleOnDrop,
   ] = useTableColumnOrder(loc_cols);
   const [editDialog, cancelEdit, saveDevice, editDevice] = useEditDevice();
+  const callbackDelete = () => {
+    setChanges(!changes);
+    setOpen(false);
+  };
   const [deleteDialog, confirmDelete, cancelDelete, deleteDevice] =
-    useDeleteDevice();
+    useDeleteDevice(selected.id, callbackDelete);
   const handleChecked = (e, col) => {
     const tempCols2 = showCols.map((showCol) => {
       if (showCol.name === col) {
@@ -112,9 +118,12 @@ const CustomTable = () => {
     setShowCols(tempCols2);
     localStorage.setItem(SHOW_COLS, JSON.stringify(tempCols2));
   };
-  const handleOpen = () => setOpen(true);
+  const handleOpen = (device) => {
+    setOpen(true);
+    setSelected(device);
+  };
   const handleClose = () => setOpen(false);
-  console.log(showCols);
+  const history = useNavigate();
   return (
     <Box sx={{ mt: 2 }}>
       <Container maxWidth="xl">
@@ -149,7 +158,7 @@ const CustomTable = () => {
                         inputProps={{ "aria-label": "controlled" }}
                       />
                     }
-                    label={col}
+                    label={lan.tableColumns[col]}
                   />
                 ))}
               </Typography>
@@ -214,7 +223,7 @@ const CustomTable = () => {
               </thead>
               <tbody>
                 {devices.map((row) => (
-                  <tr key={row.id} onClick={handleOpen}>
+                  <tr key={row.id} onClick={() => handleOpen(row)}>
                     {showCols
                       .filter((col) => col.show)
                       .map((showCol) => (
@@ -241,15 +250,16 @@ const CustomTable = () => {
         className="device-modal"
       >
         <DialogTitle id="scroll-dialog-title" sx={{ p: 2 }}>
-          Salom
+          Серийный номер счетчика: {selected.communication_number}
           <IconButton
             aria-label="close"
+            variant="contained"
             onClick={handleClose}
+            color="error"
             sx={{
               position: "absolute",
               right: 8,
-              top: 8,
-              color: (theme) => theme.palette.grey[500],
+              top: 12,
             }}
           >
             <CloseIcon />
@@ -257,23 +267,15 @@ const CustomTable = () => {
         </DialogTitle>
         <DialogContent dividers sx={{ p: 0 }}>
           <List component="nav" aria-label="mailbox folders">
-            <ListItem
-              divider
-              sx={{ my: 0, display: "flex", justifyContent: "space-between" }}
-            >
-              <Typography>Salom</Typography> <Typography>12.3</Typography>
-            </ListItem>
-            <ListItem
-              divider
-              sx={{ my: 0, display: "flex", justifyContent: "space-between" }}
-            >
-              <Typography>Salom</Typography> <Typography>12.3</Typography>
-            </ListItem>
-            <ListItem
-              sx={{ my: 0, display: "flex", justifyContent: "space-between" }}
-            >
-              <Typography>Salom</Typography> <Typography>12.3</Typography>
-            </ListItem>
+            {cols.map((device_property) => (
+              <ListItem
+                divider
+                sx={{ my: 0, display: "flex", justifyContent: "space-between" }}
+              >
+                <Typography>{lan.tableColumns[device_property]}</Typography>
+                <Typography>{selected[device_property]}</Typography>
+              </ListItem>
+            ))}
           </List>
         </DialogContent>
         <DialogActions sx={{ p: 2 }}>
@@ -283,7 +285,7 @@ const CustomTable = () => {
             loadingPosition="start"
             startIcon={<DeleteIcon />}
             variant="contained"
-            size="small"
+            size="large"
             color="error"
           >
             <span className="access-name">Удалить</span>
@@ -294,7 +296,7 @@ const CustomTable = () => {
             loadingPosition="start"
             startIcon={<EditOutlinedIcon />}
             variant="contained"
-            size="small"
+            size="large"
           >
             <span className="access-name">Изменит</span>
           </LoadingButton>
@@ -303,7 +305,7 @@ const CustomTable = () => {
             loadingPosition="start"
             startIcon={<SettingsOutlinedIcon />}
             variant="contained"
-            size="small"
+            size="large"
             color="warning"
           >
             <span className="access-name">Настройки</span>
@@ -313,8 +315,9 @@ const CustomTable = () => {
             loadingPosition="start"
             startIcon={<ChevronRightOutlinedIcon />}
             variant="contained"
-            size="small"
+            size="large"
             color="secondary"
+            onClick={() => history(`/devices/${selected.id}`)}
           >
             <span className="access-name">Данные</span>
           </LoadingButton>
@@ -323,7 +326,7 @@ const CustomTable = () => {
             loadingPosition="start"
             startIcon={<DownloadingOutlinedIcon />}
             variant="contained"
-            size="small"
+            size="large"
             color="success"
           >
             <span className="access-name">Выгрузка</span>
@@ -343,6 +346,7 @@ const CustomTable = () => {
         editDialog={editDialog}
         saveDevice={saveDevice}
         cancelEdit={cancelEdit}
+        data={selected}
       />
     </Box>
   );

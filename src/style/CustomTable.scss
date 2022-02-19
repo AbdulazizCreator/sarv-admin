@@ -2,49 +2,19 @@
   overflow-x: auto;
   background-color: white;
   margin-top: 16px;
-}
-
-.custom-table table {
-  border: 1px solid #ccc;
-  border-collapse: collapse;
-}
-.custom-table th,
-.custom-table td {
-  border: 1px solid #ccc;
-}
-.custom-table th,
-.custom-table td {
-  padding: 0.5rem;
-}
-.draggable {
-  cursor: move;
-  user-select: none;
-}
-.placeholder {
-  background-color: #edf2f7;
-  border: 2px dashed #cbd5e0;
-}
-.clone-list {
-  border-left: 1px solid #ccc;
-  border-top: 1px solid #ccc;
-  display: flex;
-}
-.clone-table {
-  border-collapse: collapse;
-  border: none;
-}
-.clone-table th,
-.clone-table td {
-  border: 1px solid #ccc;
-  border-left: none;
-  border-top: none;
-  padding: 0.5rem;
-}
-.dragging {
-  background: #fff;
-  border-left: 1px solid #ccc;
-  border-top: 1px solid #ccc;
-  z-index: 999;
+  table {
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+  }
+  tr:hover td {
+    cursor: pointer;
+    background-color: #f1f4f4;
+    transition: background-color .2s; 
+  }
 }
 
 .device-modal {
@@ -54,29 +24,25 @@
   }
 }
 
-/* width */
 ::-webkit-scrollbar {
   width: 12px;
   height: 12px;
 }
 
-/* Track */
 ::-webkit-scrollbar-track {
   background: #f1f1f1; 
 }
  
-/* Handle */
 ::-webkit-scrollbar-thumb {
   background: #888; 
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555; 
 }
 
 @media screen and (max-width: 640px) {
-  .device-modal .css-y6rp3m-MuiButton-startIcon {
+  .device-modal .MuiDialogActions-root > button > span {
     margin-right: 0;
   }
   .access-name {

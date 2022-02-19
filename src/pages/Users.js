@@ -5,15 +5,13 @@ import Box from "@mui/material/Box";
 import TreeView from "@mui/lab/TreeView";
 import TreeItem, { treeItemClasses } from "@mui/lab/TreeItem";
 import Typography from "@mui/material/Typography";
-import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
-import InfoIcon from "@mui/icons-material/Info";
-import ForumIcon from "@mui/icons-material/Forum";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
 import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import { users } from "./../api/user";
 
 const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
   color: theme.palette.text.secondary,
@@ -50,7 +48,7 @@ function StyledTreeItem(props) {
   const {
     bgColor,
     color,
-    labelIcon: LabelIcon,
+    labelIcon: PersonOutlineOutlinedIcon,
     labelInfo,
     labelText,
     ...other
@@ -60,7 +58,11 @@ function StyledTreeItem(props) {
     <StyledTreeItemRoot
       label={
         <Box className sx={{ display: "flex", alignItems: "center", py: 1.5 }}>
-          <Box component={LabelIcon} color="inherit" sx={{ mr: 1 }} />
+          <Box
+            component={PersonOutlineOutlinedIcon}
+            color="inherit"
+            sx={{ mr: 1 }}
+          />
           <Typography
             variant="body2"
             sx={{ fontWeight: "inherit", flexGrow: 1, fontSize: "20px" }}
@@ -98,61 +100,54 @@ const Users = () => {
       <Card sx={{ py: 2 }}>
         <TreeView
           aria-label="gmail"
-          defaultExpanded={["3"]}
-          onNodeFocus={handleFocusNode}
+          onNodeSelect={handleFocusNode}
           defaultCollapseIcon={<ArrowDropDownIcon className="tree-icon" />}
           defaultExpandIcon={<ArrowRightIcon className="tree-icon" />}
           defaultEndIcon={<div style={{ width: 24, fontSize: "25px" }} />}
           sx={{ flexGrow: 1, maxWidth: 600, overflowY: "auto" }}
         >
-          <StyledTreeItem
-            nodeId="3"
-            labelText="Admin"
-            labelIcon={GroupOutlinedIcon}
-          >
-            <StyledTreeItem
-              nodeId="5"
-              labelText="Social"
-              labelIcon={SupervisorAccountIcon}
-              labelInfo="90"
-              color="#1a73e8"
-              bgColor="#e8f0fe"
-            />
-            <StyledTreeItem
-              nodeId="6"
-              labelText="Updates"
-              labelIcon={InfoIcon}
-              labelInfo="2,294"
-              color="#e3742f"
-              bgColor="#fcefe3"
-            />
-            <StyledTreeItem
-              nodeId="7"
-              labelText="Forums"
-              labelIcon={ForumIcon}
-              labelInfo="3,566"
-              color="#a250f5"
-              bgColor="#f3e8fd"
-            />
-            <StyledTreeItem
-              nodeId="8"
-              labelText="Promotions"
-              labelIcon={LocalOfferIcon}
-              labelInfo="733"
-              color="#3c8039"
-              bgColor="#e6f4ea"
-            />
-          </StyledTreeItem>
-          <StyledTreeItem
-            nodeId="4"
-            labelText="Inspektor"
-            labelIcon={GroupOutlinedIcon}
-          />
-          <StyledTreeItem
-            nodeId="9"
-            labelText="TOSHGAZ"
-            labelIcon={GroupOutlinedIcon}
-          />
+          {users.results.map((user) => {
+            return (
+              <StyledTreeItem
+                nodeId={user.id}
+                labelText={user.username.toUpperCase()}
+                labelIcon={GroupOutlinedIcon}
+              >
+                {user.users_tree.length !== 0 &&
+                  user.users_tree.map((user) => {
+                    return (
+                      <StyledTreeItem
+                        nodeId={user.id}
+                        labelText={user.username.toUpperCase()}
+                        labelIcon={GroupOutlinedIcon}
+                      >
+                        {user.users_tree.length !== 0 &&
+                          user.users_tree.map((user) => {
+                            return (
+                              <StyledTreeItem
+                                nodeId={user.id}
+                                labelText={user.username.toUpperCase()}
+                                labelIcon={GroupOutlinedIcon}
+                              >
+                                {user.users_tree.length !== 0 &&
+                                  user.users_tree.map((user) => {
+                                    return (
+                                      <StyledTreeItem
+                                        nodeId={user.id}
+                                        labelText={user.username.toUpperCase()}
+                                        labelIcon={GroupOutlinedIcon}
+                                      ></StyledTreeItem>
+                                    );
+                                  })}
+                              </StyledTreeItem>
+                            );
+                          })}
+                      </StyledTreeItem>
+                    );
+                  })}
+              </StyledTreeItem>
+            );
+          })}
         </TreeView>
       </Card>
     </Container>

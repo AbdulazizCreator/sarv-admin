@@ -2,7 +2,7 @@ export const Uz = {
   login: "Авторизоваться",
   tableColumns: {
     id: "№",
-    communication_number: "60121100000662",
+    communication_number: "Лицевой счет",
     imei: "IMEI",
     sim_number: "Номер сим-карты счетчика",
     phone_number: "Телефон номер",

@@ -6,7 +6,8 @@ const useEditDevice = () => {
   const cancelEdit = () => {
     setEditDialog(false);
   };
-  const saveDevice = () => {
+  const saveDevice = (values) => {
+    console.log(values);
     setEditDialog(false);
   };
   const editDevice = () => {

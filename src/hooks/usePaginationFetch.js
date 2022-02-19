@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { getAllDataWithPagination } from "../api/common";
+import { getQuery } from "../api/common";
 
-const usePaginationFetch = (url, changes = []) => {
+const usePaginationFetch = (url, query, changes) => {
   const [data, setData] = useState([]);
 
   const [page, setPage] = useState(1);
@@ -9,7 +9,8 @@ const usePaginationFetch = (url, changes = []) => {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(true);
-    getAllDataWithPagination(url, 1)
+
+    getQuery(url, { p: 1, page_size: 10, ...query })
       .then((res) => {
         setData(res.data.results);
         setTotalElements(res.data.count);
@@ -17,11 +18,11 @@ const usePaginationFetch = (url, changes = []) => {
       .finally((err) => {
         setLoading(false);
       });
-  }, [url]);
+  }, [url, query, changes]);
   const handlePaginationChange = (page) => {
     setLoading(true);
     setPage(page);
-    getAllDataWithPagination(url, page).then((res) => {
+    getQuery(url, { p: page, page_size: 10, ...query }).then((res) => {
       setData(res.data.results);
       setLoading(false);
     });

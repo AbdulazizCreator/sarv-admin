@@ -16,6 +16,7 @@ import {
   NotFound,
   Statistics,
   Settings,
+  SpecificDevice,
 } from "./pages";
 import { getCookie } from "./utils/cookies";
 import { TOKEN } from "./const";
@@ -62,6 +63,10 @@ function App() {
       path: "settings",
       comp: Settings,
     },
+    {
+      path: '/devices/:id',
+      comp: SpecificDevice
+    }
   ];
 
   return (

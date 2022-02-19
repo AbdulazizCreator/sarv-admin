@@ -1,14 +1,4 @@
-import { PGNTN_LIMIT } from "../const";
 import { HttpRequest } from "./HttpRequest";
-
-export const getAllDataWithPagination = (url, page) => {
-  const config = {
-    method: "GET",
-    url: `${url}/?p=${page}&page_size=${PGNTN_LIMIT}`,
-  };
-  return HttpRequest(config);
-};
-
 // const query = {
 //   region: 4,
 //   district: 9,
@@ -21,10 +11,10 @@ export const getQuery = (url, query) => {
     .slice(0, -1);
   const config = {
     method: "GET",
-    url: query_str,
+    url: url + query_str,
   };
   return HttpRequest(config);
-}
+};
 
 export const getData = (name) => {
   const config = {
@@ -47,6 +37,14 @@ export const postData = (url, data) => {
     method: "POST",
     url,
     data,
+  };
+  return HttpRequest(config);
+};
+
+export const deleteData = (url) => {
+  const config = {
+    method: "DELETE",
+    url,
   };
   return HttpRequest(config);
 };

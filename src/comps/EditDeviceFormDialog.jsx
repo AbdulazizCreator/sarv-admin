@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
@@ -37,7 +37,14 @@ const EditDeviceFormDialog = (props) => {
   const [district, setDistrict] = useState("");
   const [personName, setPersonName] = React.useState([]);
 
+  useEffect(() => {
+    setValues(props.data);
+    setRegion(props.data.region);
+    setDistrict(props.data.district);
+  }, [props.data]);
+
   const handleChange = (event) => {
+    console.log(event.target.value)
     setValues({
       ...values,
       [event.target.name]: event.target.value,
@@ -52,8 +59,10 @@ const EditDeviceFormDialog = (props) => {
             <Grid item xs={12} md={6}>
               <TextField
                 margin="dense"
-                id="fullname"
-                name="fullname"
+                value={values.full_name}
+                onChange={handleChange}
+                id="full_name"
+                name="full_name"
                 label="Наименование абонента"
                 fullWidth
               />
@@ -61,8 +70,10 @@ const EditDeviceFormDialog = (props) => {
             <Grid item xs={12} md={6}>
               <TextField
                 margin="dense"
-                id="fullname"
-                name="fullname"
+                value={values.communication_number}
+                onChange={handleChange}
+                id="communication_number"
+                name="communication_number"
                 label="Лицевой счет"
                 fullWidth
               />
@@ -73,13 +84,16 @@ const EditDeviceFormDialog = (props) => {
                 onChange={handleChange}
                 label="Телефон номер"
                 name="phone_number"
+                id="phone_number"
               />
             </Grid>
             <Grid item xs={12} md={6}>
               <TextField
                 margin="dense"
                 label="Адрес"
-                name="address"
+                value={values.full_address}
+                name="full_address"
+                id="full_address"
                 fullWidth
               />
             </Grid>
@@ -87,6 +101,7 @@ const EditDeviceFormDialog = (props) => {
               <Autocomplete
                 id="free-solo-demo"
                 options={["fdsa", "fsdafds"]}
+                value={region}
                 onChange={(e, v) => {
                   setValues({ ...values, region: v });
                   setRegion(v);
@@ -116,7 +131,7 @@ const EditDeviceFormDialog = (props) => {
                 id="free-solo-demo"
                 options={["fdsa", "fsdafds"]}
                 onChange={(e, v) => {
-                  setValues({ ...values, industry: v });
+                  setValues({ ...values, branch: v });
                 }}
                 renderInput={(params) => (
                   <TextField margin="dense" {...params} label="Отрасль" />
@@ -125,10 +140,10 @@ const EditDeviceFormDialog = (props) => {
             </Grid>
             <Grid item xs={12} md={6}>
               <PhoneNumberInput
-                value={values.sim_card_number}
+                value={values.sim_number}
                 onChange={handleChange}
                 label="Номер сим-карты счетчика"
-                name="sim_card_number"
+                name="sim_number"
               />
             </Grid>
             <Grid item xs={12}>
@@ -162,15 +177,26 @@ const EditDeviceFormDialog = (props) => {
         </Box>
       </DialogContent>
       <DialogActions sx={{ justifyContent: "space-between", p: "16px 24px" }}>
-        <FormControlLabel
-          control={<Checkbox defaultChecked />}
-          label="Статус: Активный"
+        <Checkbox
+          checked={values.is_registered}
+          name="is_registered"
+          onChange={handleChange}
+          inputProps={{ "aria-label": "controlled" }}
         />
         <Box>
-          <Button color="error" onClick={props.cancelEdit}>
+          <Button
+            color="error"
+            variant="contained"
+            onClick={props.cancelEdit}
+            sx={{ mr: 1 }}
+          >
             Отмена
           </Button>
-          <Button color="success" onClick={props.saveDevice}>
+          <Button
+            color="success"
+            variant="contained"
+            onClick={() => props.saveDevice(values)}
+          >
             Сохранит
           </Button>
         </Box>

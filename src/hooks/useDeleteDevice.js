@@ -1,10 +1,13 @@
-import{ useState } from "react";
+import { useState } from "react";
+import { deleteData } from "../api/common";
 
-const useDeleteDevice = () => {
+const useDeleteDevice = (id, callback) => {
   const [deleteDialog, setDeleteDialog] = useState(false);
 
   const confirmDelete = () => {
+    deleteData(`device/${id}/`);
     setDeleteDialog(false);
+    callback();
   };
   const cancelDelete = () => {
     setDeleteDialog(false);
