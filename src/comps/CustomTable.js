@@ -66,7 +66,8 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 }));
 
 const CustomTable = (props) => {
-  const cols = Object.keys(lan.tableColumns);
+  const columns = lan.deviceProperties.visible;
+  const cols = Object.keys(columns);
   const loc_cols =
     JSON.parse(localStorage.getItem(SHOW_COLS)) ||
     localStorage.setItem(
@@ -96,7 +97,7 @@ const CustomTable = (props) => {
     handleDragOver,
     handleDragEnter,
     handleOnDrop,
-  ] = useTableColumnOrder(loc_cols);
+  ] = useTableColumnOrder(loc_cols, true);
   const [editDialog, cancelEdit, saveDevice, editDevice] = useEditDevice();
   const callbackDelete = () => {
     setChanges(!changes);
@@ -124,6 +125,7 @@ const CustomTable = (props) => {
   };
   const handleClose = () => setOpen(false);
   const history = useNavigate();
+  console.log(devices);
   return (
     <Box sx={{ mt: 2 }}>
       <Container maxWidth="xl">
@@ -137,30 +139,33 @@ const CustomTable = (props) => {
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
-                {cols.map((col, index) => (
-                  <FormControlLabel
-                    sx={{ backgroundColor: "#ddd", pr: "5px", mb: "5px" }}
-                    key={index}
-                    control={
-                      <Checkbox
-                        sx={{
-                          color: "",
-                          "&.Mui-checked": {
-                            color: "black",
-                          },
-                          padding: "3px",
-                        }}
-                        size="small"
-                        checked={
-                          showCols.find((showCol) => showCol.name === col)?.show
-                        }
-                        onChange={(e) => handleChecked(e, col)}
-                        inputProps={{ "aria-label": "controlled" }}
-                      />
-                    }
-                    label={lan.tableColumns[col]}
-                  />
-                ))}
+                {cols.length !== 0 &&
+                  cols.map((col, index) => (
+                    <FormControlLabel
+                      sx={{ backgroundColor: "#ddd", pr: "5px", mb: "5px" }}
+                      key={index}
+                      control={
+                        <Checkbox
+                          sx={{
+                            color: "",
+                            "&.Mui-checked": {
+                              color: "black",
+                            },
+                            padding: "3px",
+                          }}
+                          size="small"
+                          checked={
+                            showCols &&
+                            showCols.find((showCol) => showCol.name === col)
+                              ?.show
+                          }
+                          onChange={(e) => handleChecked(e, col)}
+                          inputProps={{ "aria-label": "controlled" }}
+                        />
+                      }
+                      label={columns[col]}
+                    />
+                  ))}
               </Typography>
             </AccordionDetails>
           </Accordion>
@@ -185,14 +190,16 @@ const CustomTable = (props) => {
           }}
         >
           <Typography>{totalElements} ta</Typography>
-          <Pagination
-            page={currentPage}
-            onChange={(e, v) => handlePaginationChange(v)}
-            className="pagination"
-            count={Math.ceil(totalElements / PGNTN_LIMIT)}
-            variant="outlined"
-            shape="rounded"
-          />
+          {totalElements.length > 10 && (
+            <Pagination
+              page={currentPage}
+              onChange={(e, v) => handlePaginationChange(v)}
+              className="pagination"
+              count={Math.ceil(totalElements / PGNTN_LIMIT)}
+              variant="outlined"
+              shape="rounded"
+            />
+          )}
         </Box>
         {isFetching ? (
           <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -203,39 +210,44 @@ const CustomTable = (props) => {
             <table>
               <thead>
                 <tr>
-                  {showCols
-                    .filter((showCol) => showCol.show)
-                    .map((col) => (
-                      <th
-                        id={col.name}
-                        key={col.name}
-                        draggable
-                        onDragStart={handleDragStart}
-                        onDragOver={handleDragOver}
-                        onDrop={handleOnDrop}
-                        onDragEnter={handleDragEnter}
-                        dragover={col.name === dragOver ? true : false}
-                      >
-                        {lan.tableColumns[col.name]}
-                      </th>
-                    ))}
+                  {showCols &&
+                    showCols
+                      .filter((showCol) => showCol.show)
+                      .map((col) => (
+                        <th
+                          id={col.name}
+                          key={col.name}
+                          draggable
+                          onDragStart={handleDragStart}
+                          onDragOver={handleDragOver}
+                          onDrop={handleOnDrop}
+                          onDragEnter={handleDragEnter}
+                          dragover={col.name === dragOver ? true : false}
+                        >
+                          {columns[col.name]}
+                        </th>
+                      ))}
                 </tr>
               </thead>
               <tbody>
-                {devices.map((row) => (
-                  <tr key={row.id} onClick={() => handleOpen(row)}>
-                    {showCols
-                      .filter((col) => col.show)
-                      .map((showCol) => (
-                        <td
-                          key={showCol.id}
-                          dragover={showCol.name === dragOver ? true : false}
-                        >
-                          {row[showCol.name]}
-                        </td>
-                      ))}
-                  </tr>
-                ))}
+                {devices.length !== 0 &&
+                  devices.map((row) => (
+                    <tr key={row.id} onClick={() => handleOpen(row)}>
+                      {showCols &&
+                        showCols
+                          .filter((col) => col.show)
+                          .map((showCol) => (
+                            <td
+                              key={showCol.id}
+                              dragover={
+                                showCol.name === dragOver ? true : false
+                              }
+                            >
+                              {row[showCol.name]}
+                            </td>
+                          ))}
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
@@ -270,9 +282,10 @@ const CustomTable = (props) => {
             {cols.map((device_property) => (
               <ListItem
                 divider
+                key={device_property}
                 sx={{ my: 0, display: "flex", justifyContent: "space-between" }}
               >
-                <Typography>{lan.tableColumns[device_property]}</Typography>
+                <Typography>{columns[device_property]}</Typography>
                 <Typography>{selected[device_property]}</Typography>
               </ListItem>
             ))}

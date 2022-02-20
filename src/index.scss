@@ -14,6 +14,7 @@ body {
     &:first-child button {
       margin-left: 0;
     }
+
     &:last-child button {
       margin-right: 0;
     }
@@ -22,4 +23,11 @@ body {
 
 .tree-icon {
   font-size: 30px !important;
+}
+
+@media screen and (max-width: 1000px) {
+  .specialDeviceData {
+    flex-direction: column;
+  }
+
 }

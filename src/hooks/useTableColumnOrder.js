@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { SHOW_COLS } from "../const";
 
-const useTableColumnOrder = (loc_cols) => {
+const useTableColumnOrder = (loc_cols, isSavedToLocalStorage) => {
   const [showCols, setShowCols] = useState(loc_cols);
 
   const [dragOver, setDragOver] = useState("");
@@ -29,7 +29,8 @@ const useTableColumnOrder = (loc_cols) => {
     tempCols[droppedColIdx] = showCols[draggedColIdx];
 
     setShowCols(tempCols);
-    localStorage.setItem(SHOW_COLS, JSON.stringify(tempCols));
+    isSavedToLocalStorage &&
+      localStorage.setItem(SHOW_COLS, JSON.stringify(tempCols));
     setDragOver("");
   };
   return [

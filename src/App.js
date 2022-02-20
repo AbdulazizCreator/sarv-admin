@@ -64,9 +64,9 @@ function App() {
       comp: Settings,
     },
     {
-      path: '/devices/:id',
-      comp: SpecificDevice
-    }
+      path: "/devices/:id",
+      comp: SpecificDevice,
+    },
   ];
 
   return (

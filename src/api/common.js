@@ -16,10 +16,10 @@ export const getQuery = (url, query) => {
   return HttpRequest(config);
 };
 
-export const getData = (name) => {
+export const getData = (url) => {
   const config = {
     method: "GET",
-    url: `${name}`,
+    url,
   };
   return HttpRequest(config);
 };
