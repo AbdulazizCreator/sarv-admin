@@ -68,8 +68,10 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 const CustomTable = (props) => {
   const columns = lan.deviceProperties.visible;
   const cols = Object.keys(columns);
-  const loc_cols =
-    JSON.parse(localStorage.getItem(props.show_cols_name)) ||
+  let loc_cols;
+  if (JSON.parse(localStorage.getItem(props.show_cols_name))) {
+    loc_cols = JSON.parse(localStorage.getItem(props.show_cols_name));
+  } else {
     localStorage.setItem(
       props.show_cols_name,
       JSON.stringify(
@@ -78,6 +80,10 @@ const CustomTable = (props) => {
         })
       )
     );
+    loc_cols = cols.map((col, idx) => {
+      return { id: idx, name: col, show: true };
+    });
+  }
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState({});
   const [changes, setChanges] = useState(false);
