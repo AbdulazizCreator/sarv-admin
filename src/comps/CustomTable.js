@@ -106,6 +106,7 @@ const CustomTable = (props) => {
   const [deleteDialog, confirmDelete, cancelDelete, deleteDevice] =
     useDeleteDevice(selected.id, callbackDelete);
   const handleChecked = (e, col) => {
+    console.log(e.target.checked);
     const tempCols2 = showCols.map((showCol) => {
       if (showCol.name === col) {
         return {
@@ -156,8 +157,7 @@ const CustomTable = (props) => {
                           checked={
                             showCols &&
                             showCols.find((showCol) => showCol.name === col)
-                              ? true
-                              : false
+                              .show
                           }
                           onChange={(e) => handleChecked(e, col)}
                           inputProps={{ "aria-label": "controlled" }}
