@@ -17,6 +17,7 @@ import {
   Statistics,
   Settings,
   SpecificDevice,
+  Profile,
 } from "./pages";
 import { getCookie } from "./utils/cookies";
 import { TOKEN } from "./const";
@@ -66,6 +67,10 @@ function App() {
     {
       path: "/devices/:id",
       comp: SpecificDevice,
+    },
+    {
+      path: "profile",
+      comp: Profile,
     },
   ];
 
