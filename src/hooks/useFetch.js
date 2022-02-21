@@ -8,7 +8,11 @@ const useFetch = (url) => {
     setLoading(true);
     getData(url)
       .then((res) => {
-        setData(res.data);
+        if (res.data.results) {
+          setData(res.data.results);
+        } else {
+          setData(res.data);
+        }
       })
       .finally((err) => {
         setLoading(false);

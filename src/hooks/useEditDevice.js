@@ -1,6 +1,9 @@
 import { useState } from "react";
+// import { getData } from "../api/common";
+import { patchData } from "./../api/common";
+import { toast } from "react-toastify";
 
-const useEditDevice = () => {
+const useEditDevice = (data, callback) => {
   const [editDialog, setEditDialog] = useState(false);
 
   const cancelEdit = () => {
@@ -8,7 +11,11 @@ const useEditDevice = () => {
   };
   const saveDevice = (values) => {
     console.log(values);
-    setEditDialog(false);
+    patchData(`api/device/${values.id}/`, values).then((res) => {
+      setEditDialog(false);
+      toast.success("Изменено успешно");
+      callback();
+    });
   };
   const editDevice = () => {
     setEditDialog(true);

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { deleteData } from "../api/common";
+import { toast } from "react-toastify";
 
 const useDeleteDevice = (id, callback) => {
   const [deleteDialog, setDeleteDialog] = useState(false);
@@ -7,6 +8,7 @@ const useDeleteDevice = (id, callback) => {
   const confirmDelete = () => {
     deleteData(`api/device/${id}/`);
     setDeleteDialog(false);
+    toast.success("Удалено успешно");
     callback();
   };
   const cancelDelete = () => {

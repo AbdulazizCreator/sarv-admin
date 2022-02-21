@@ -16,6 +16,10 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Button } from "@mui/material";
+import FormControlLabel from "@mui/material/FormControlLabel";
+
+import useFetch from "./../hooks/useFetch";
+import { getData } from "../api/common";
 
 const names = [
   "Oliver Hansen",
@@ -30,28 +34,46 @@ const names = [
   "Kelly Snyder",
 ];
 
+const branches = [
+  { label: "Юрлицо", value: "entity" },
+  { label: "Физлицо", value: "individuals" },
+];
+
 const EditDeviceFormDialog = (props) => {
   const [values, setValues] = useState({});
-  const [region, setRegion] = useState("");
-  const [district, setDistrict] = useState("");
   const [personName, setPersonName] = React.useState([]);
-
-  useEffect(() => {
-    setValues(props.data);
-    setRegion(props.data.region);
-    setDistrict(props.data.district);
-  }, [props.data]);
-
+  const [region, setRegion] = useState(null);
+  const [district, setDistrict] = useState(null);
+  const [regions] = useFetch("api/region/?limit=15");
+  const [districts, setDistricts] = useState([]);
+  const [branch, setBranch] = useState(null);
   const handleChange = (event) => {
-    console.log(event.target.value)
     setValues({
       ...values,
       [event.target.name]: event.target.value,
     });
   };
+  useEffect(() => {
+    getData(`api/device/${props.data.id}`).then((res) => {
+      setValues(res.data);
+      setBranch(branches.find((br) => br.value === res.data.branch));
+      getData(`api/district/?p=1&page_size=15&region=${res.data.region}`).then(
+        (res) => {
+          setDistricts(res.data.results);
+        }
+      );
+      getData(`api/region/${res.data.region}/`).then((res) => {
+        setRegion(res.data);
+      });
+      getData(`api/district/${res.data.district}/`).then((res) => {
+        setDistrict(res.data);
+      });
+    });
+  }, [props.data.id]);
+
   return (
     <Dialog maxWidth="md" open={props.editDialog}>
-      <DialogTitle>Серийный номер счетчика: 00007953</DialogTitle>
+      <DialogTitle>Серийный номер счетчика: {values.serial_number}</DialogTitle>
       <DialogContent>
         <Box sx={{ minWidth: "300px" }} className="edit-dialog-box">
           <Grid container spacing={2}>
@@ -91,6 +113,7 @@ const EditDeviceFormDialog = (props) => {
                 margin="dense"
                 label="Адрес"
                 value={values.full_address}
+                onChange={handleChange}
                 name="full_address"
                 id="full_address"
                 fullWidth
@@ -99,11 +122,21 @@ const EditDeviceFormDialog = (props) => {
             <Grid item xs={12} md={6}>
               <Autocomplete
                 id="free-solo-demo"
-                options={["fdsa", "fsdafds"]}
+                options={regions}
                 value={region}
+                getOptionLabel={(option) => option.region}
+                renderOption={(props, option) => (
+                  <li {...props}> {option.region}</li>
+                )}
                 onChange={(e, v) => {
-                  setValues({ ...values, region: v });
+                  setValues({ ...values, region: v && v.id });
                   setRegion(v);
+                  getData(`api/district/?p=1&page_size=15&region=${v.id}`).then(
+                    (res) => {
+                      setDistricts(res.data.results);
+                    }
+                  );
+                  setDistrict(null);
                 }}
                 renderInput={(params) => (
                   <TextField margin="dense" {...params} label="Область" />
@@ -113,11 +146,15 @@ const EditDeviceFormDialog = (props) => {
             <Grid item xs={12} md={6}>
               <Autocomplete
                 id="free-solo-demo"
-                options={["fdsa", "fsdafds"]}
+                options={districts}
                 disabled={region ? false : true}
                 value={district}
+                getOptionLabel={(option) => option.district}
+                renderOption={(props, option) => (
+                  <li {...props}> {option.district}</li>
+                )}
                 onChange={(e, v) => {
-                  setValues({ ...values, district: v });
+                  setValues({ ...values, district: v && v.id });
                   setDistrict(v);
                 }}
                 renderInput={(params) => (
@@ -128,9 +165,15 @@ const EditDeviceFormDialog = (props) => {
             <Grid item xs={12} md={6}>
               <Autocomplete
                 id="free-solo-demo"
-                options={["fdsa", "fsdafds"]}
+                options={branches}
+                getOptionLabel={(option) => option.label}
+                renderOption={(props, option) => (
+                  <li {...props}> {option.label}</li>
+                )}
+                value={branch}
                 onChange={(e, v) => {
-                  setValues({ ...values, branch: v });
+                  setBranch(v);
+                  setValues({ ...values, branch: v && v.value });
                 }}
                 renderInput={(params) => (
                   <TextField margin="dense" {...params} label="Отрасль" />
@@ -147,7 +190,9 @@ const EditDeviceFormDialog = (props) => {
             </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth>
-                <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
+                <InputLabel id="demo-multiple-checkbox-label">
+                  Пользователи
+                </InputLabel>
                 <Select
                   labelId="demo-multiple-checkbox-label"
                   id="demo-multiple-checkbox"
@@ -160,7 +205,7 @@ const EditDeviceFormDialog = (props) => {
                         : e.target.value
                     )
                   }
-                  input={<OutlinedInput label="Tag" />}
+                  input={<OutlinedInput label="Пользователи" />}
                   renderValue={(selected) => selected.join(", ")}
                 >
                   {names.map((name) => (
@@ -176,12 +221,20 @@ const EditDeviceFormDialog = (props) => {
         </Box>
       </DialogContent>
       <DialogActions sx={{ justifyContent: "space-between", p: "16px 24px" }}>
-        <Checkbox
-          checked={values.is_registered}
-          name="is_registered"
-          onChange={handleChange}
-          inputProps={{ "aria-label": "controlled" }}
+        <FormControlLabel
+          label={`Статус: ${values.is_registered ? "Активный" : "Неактивный"}`}
+          control={
+            <Checkbox
+              checked={values.is_registered}
+              name="is_registered"
+              onChange={(e) => {
+                setValues({ ...values, is_registered: e.target.checked });
+              }}
+              inputProps={{ "aria-label": "controlled" }}
+            ></Checkbox>
+          }
         />
+
         <Box>
           <Button
             color="error"
@@ -204,4 +257,4 @@ const EditDeviceFormDialog = (props) => {
   );
 };
 
-export default EditDeviceFormDialog;
+export default React.memo(EditDeviceFormDialog);

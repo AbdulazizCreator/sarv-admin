@@ -41,6 +41,15 @@ export const postData = (url, data) => {
   return HttpRequest(config);
 };
 
+export const patchData = (url, data) => {
+  const config = {
+    method: "PATCH",
+    url,
+    data,
+  };
+  return HttpRequest(config);
+};
+
 export const deleteData = (url) => {
   const config = {
     method: "DELETE",

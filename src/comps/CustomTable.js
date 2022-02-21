@@ -104,13 +104,16 @@ const CustomTable = (props) => {
     handleDragEnter,
     handleOnDrop,
   ] = useTableColumnOrder(loc_cols, true);
-  const [editDialog, cancelEdit, saveDevice, editDevice] = useEditDevice();
-  const callbackDelete = () => {
+  const callback = () => {
     setChanges(!changes);
     setOpen(false);
   };
+  const [editDialog, cancelEdit, saveDevice, editDevice] = useEditDevice(
+    selected,
+    callback
+  );
   const [deleteDialog, confirmDelete, cancelDelete, deleteDevice] =
-    useDeleteDevice(selected.id, callbackDelete);
+    useDeleteDevice(selected.id, callback);
   const handleChecked = (e, col) => {
     console.log(e.target.checked);
     const tempCols2 = showCols.map((showCol) => {
@@ -311,7 +314,7 @@ const CustomTable = (props) => {
           </LoadingButton>
           <LoadingButton
             loading={false}
-            onClick={() => editDevice()}
+            onClick={() => editDevice(selected)}
             loadingPosition="start"
             startIcon={<EditOutlinedIcon />}
             variant="contained"
@@ -361,12 +364,14 @@ const CustomTable = (props) => {
           <Button onClick={confirmDelete}>Да</Button>
         </DialogActions>
       </Dialog>
-      <EditDeviceFormDialog
-        editDialog={editDialog}
-        saveDevice={saveDevice}
-        cancelEdit={cancelEdit}
-        data={selected}
-      />
+      {selected.id && (
+        <EditDeviceFormDialog
+          editDialog={editDialog}
+          saveDevice={saveDevice}
+          cancelEdit={cancelEdit}
+          data={selected}
+        />
+      )}
     </Box>
   );
 };
