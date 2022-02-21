@@ -196,7 +196,7 @@ const CustomTable = (props) => {
           }}
         >
           <Typography>{totalElements} ta</Typography>
-          {totalElements.length > 10 && (
+          {totalElements > PGNTN_LIMIT && (
             <Pagination
               page={currentPage}
               onChange={(e, v) => handlePaginationChange(v)}
