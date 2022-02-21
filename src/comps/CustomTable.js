@@ -156,7 +156,8 @@ const CustomTable = (props) => {
                           checked={
                             showCols &&
                             showCols.find((showCol) => showCol.name === col)
-                              ?.show
+                              ? true
+                              : false
                           }
                           onChange={(e) => handleChecked(e, col)}
                           inputProps={{ "aria-label": "controlled" }}
