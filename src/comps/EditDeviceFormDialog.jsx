@@ -75,7 +75,7 @@ const EditDeviceFormDialog = (props) => {
     <Dialog maxWidth="md" open={props.editDialog}>
       <DialogTitle>Серийный номер счетчика: {values.serial_number}</DialogTitle>
       <DialogContent>
-        <Box sx={{ minWidth: "300px" }} className="edit-dialog-box">
+        <Box sx={{ minWidth: "250px" }} className="edit-dialog-box">
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               <TextField
@@ -220,7 +220,7 @@ const EditDeviceFormDialog = (props) => {
           </Grid>
         </Box>
       </DialogContent>
-      <DialogActions sx={{ justifyContent: "space-between", p: "16px 24px" }}>
+      <DialogActions className='edit-device-footer' sx={{ justifyContent: "space-between", p: "16px 24px" }}>
         <FormControlLabel
           label={`Статус: ${values.is_registered ? "Активный" : "Неактивный"}`}
           control={

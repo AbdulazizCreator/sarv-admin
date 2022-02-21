@@ -29,5 +29,15 @@ body {
   .specialDeviceData {
     flex-direction: column;
   }
+}
 
+@media screen and (max-width: 550px) {
+  .css-683v33-MuiDivider-root {
+    white-space: normal !important;
+  }
+
+  .edit-device-footer {
+    flex-direction: column;
+    align-items: self-start !important;
+  }
 }
