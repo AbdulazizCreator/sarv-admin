@@ -40,7 +40,7 @@ const SpecificDeviceTable = (props) => {
           mt: "16px",
         }}
       >
-        {hourlyDataNumber.length > 10 && (
+        {hourlyDataNumber.length > PGNTN_LIMIT && (
           <Pagination
             page={hourlyCurrentPage}
             onChange={(e, v) => hourlyHandlePagination(v)}

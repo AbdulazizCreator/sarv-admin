@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getQuery } from "../api/common";
+import { PGNTN_LIMIT } from "../const";
 
 const usePaginationFetch = (url, query, changes) => {
   const [data, setData] = useState([]);
@@ -10,7 +11,7 @@ const usePaginationFetch = (url, query, changes) => {
   useEffect(() => {
     setLoading(true);
 
-    getQuery(url, { p: 1, page_size: 10, ...query })
+    getQuery(url, { p: 1, page_size: PGNTN_LIMIT, ...query })
       .then((res) => {
         setData(res.data.results);
         setTotalElements(res.data.count);
@@ -22,7 +23,7 @@ const usePaginationFetch = (url, query, changes) => {
   const handlePaginationChange = (page) => {
     setLoading(true);
     setPage(page);
-    getQuery(url, { p: page, page_size: 10, ...query }).then((res) => {
+    getQuery(url, { p: page, page_size: PGNTN_LIMIT, ...query }).then((res) => {
       setData(res.data.results);
       setLoading(false);
     });
