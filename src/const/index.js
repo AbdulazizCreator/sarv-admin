@@ -4,3 +4,6 @@ export const LANG = "SARF_LANGUAGE";
 export const DOMAIN = "https://blatnoy.pythonanywhere.com";
 export const API = `${DOMAIN}/`;
 export const PGNTN_LIMIT = 10;
+export const SHOW_COLS_LEGAL = "SHOW_COLS_LEGAL";
+export const SHOW_COLS_PHYSICAL = "SHOW_COLS_PHYSICAL";
+export const SHOW_COLS_NOT_REGISTERED = "SHOW_COLS_NOT_REGISTERED";

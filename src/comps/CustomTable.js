@@ -11,7 +11,7 @@ import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import { PGNTN_LIMIT, SHOW_COLS } from "../const";
+import { PGNTN_LIMIT } from "../const";
 import usePaginationFetch from "./../hooks/usePaginationFetch";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -69,9 +69,9 @@ const CustomTable = (props) => {
   const columns = lan.deviceProperties.visible;
   const cols = Object.keys(columns);
   const loc_cols =
-    JSON.parse(localStorage.getItem(SHOW_COLS)) ||
+    JSON.parse(localStorage.getItem(props.show_cols_name)) ||
     localStorage.setItem(
-      SHOW_COLS,
+      props.show_cols_name,
       JSON.stringify(
         cols.map((col, idx) => {
           return { id: idx, name: col, show: true };
@@ -117,7 +117,7 @@ const CustomTable = (props) => {
       }
     });
     setShowCols(tempCols2);
-    localStorage.setItem(SHOW_COLS, JSON.stringify(tempCols2));
+    localStorage.setItem(props.show_cols_name, JSON.stringify(tempCols2));
   };
   const handleOpen = (device) => {
     setOpen(true);
@@ -125,7 +125,6 @@ const CustomTable = (props) => {
   };
   const handleClose = () => setOpen(false);
   const history = useNavigate();
-  console.log(devices);
   return (
     <Box sx={{ mt: 2 }}>
       <Container maxWidth="xl">

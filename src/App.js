@@ -78,7 +78,7 @@ function App() {
             path="/"
             element={
               isLoggedIn ? (
-                <Navigate replace to="dashboard" />
+                <Navigate replace to="devices" />
               ) : (
                 <Navigate replace to="login" />
               )

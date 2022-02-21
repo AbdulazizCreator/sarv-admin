@@ -17,8 +17,14 @@ import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import "../../style/navbar.scss";
-import { deleteCookie } from './../../utils/cookies';
-import { TOKEN } from "../../const";
+import { deleteCookie } from "./../../utils/cookies";
+import {
+  SHOW_COLS,
+  SHOW_COLS_PHYSICAL,
+  TOKEN,
+  SHOW_COLS_LEGAL,
+  SHOW_COLS_NOT_REGISTERED,
+} from "../../const";
 
 const pages = [
   { name: "Приборы (Все)", url: "/devices" },
@@ -54,6 +60,10 @@ const Navbar = () => {
   };
   const logout = () => {
     handleCloseUserMenu();
+    localStorage.removeItem(SHOW_COLS);
+    localStorage.removeItem(SHOW_COLS_LEGAL);
+    localStorage.removeItem(SHOW_COLS_PHYSICAL);
+    localStorage.removeItem(SHOW_COLS_NOT_REGISTERED);
     deleteCookie(TOKEN);
     window.location.href = "/";
   };
