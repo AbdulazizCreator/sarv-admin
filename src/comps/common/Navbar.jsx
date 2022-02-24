@@ -155,6 +155,7 @@ const Navbar = () => {
               flexGrow: 1,
               display: { xs: "none", lg: "flex" },
             }}
+            className="desktop-navbar"
           >
             <List
               sx={{
@@ -165,7 +166,6 @@ const Navbar = () => {
             >
               {pages.map((page, index) => (
                 <ListItem
-                  button
                   end
                   component={NavLink}
                   to={page.url}

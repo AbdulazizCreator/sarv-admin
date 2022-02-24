@@ -1,12 +1,14 @@
-.navbar  {
+.navbar {
   min-height: 64px;
+
   .active {
     color: black;
     background-color: #ddd;
   }
+
   span {
-    text-align: center;  
-    white-space:nowrap;
+    text-align: center;
+    white-space: nowrap;
     color: black;
   }
 }
@@ -15,5 +17,11 @@
   .active {
     background-color: rgba(0, 0, 0, 0.1);
   }
+}
 
+.desktop-navbar {
+  a {
+    transition: none !important;
+    -webkit-transition: none !important;
+  }
 }
