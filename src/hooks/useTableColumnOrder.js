@@ -23,8 +23,9 @@ const useTableColumnOrder = (loc_cols, isSavedToLocalStorage) => {
     const { id } = e.target;
     const droppedColIdx = showCols.findIndex((col) => col.name === id);
     const draggedColIdx = e.dataTransfer.getData("colIdx");
-    const tempCols = [...showCols];
-
+    let tempCols = [...showCols];
+    // tempCols.splice(droppedColIdx, 1);
+    // tempCols.splice(draggedColIdx + 1, 0, showCols[droppedColIdx]);
     tempCols[draggedColIdx] = showCols[droppedColIdx];
     tempCols[droppedColIdx] = showCols[draggedColIdx];
 

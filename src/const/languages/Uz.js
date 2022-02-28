@@ -2,7 +2,6 @@ export const Uz = {
   login: "Авторизоваться",
   deviceProperties: {
     visible: {
-      id: "№",
       communication_number: "Лицевой счет",
       imei: "IMEI",
       sim_number: "Номер сим-карты счетчика",
@@ -34,6 +33,7 @@ export const Uz = {
       updated_at: "Updated at",
     },
     unvisible: {
+      id: "№",
       pressure: "Pressure",
       valve_status: "Meter status1",
       meter_status: "Meter status2",

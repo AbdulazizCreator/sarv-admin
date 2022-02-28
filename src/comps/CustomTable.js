@@ -28,13 +28,15 @@ import CloseIcon from "@mui/icons-material/Close";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import CircularProgress from "@mui/material/CircularProgress";
-import { Button } from "@mui/material";
+import { Button, Card } from "@mui/material";
 import EditDeviceFormDialog from "./EditDeviceFormDialog";
 import useTableColumnOrder from "../hooks/useTableColumnOrder";
 import useEditDevice from "./../hooks/useEditDevice";
 import useDeleteDevice from "./../hooks/useDeleteDevice";
 import lan from "../const/languages/lan";
 import { useNavigate } from "react-router-dom";
+import Filter from "./Filter";
+import debounce from "lodash.debounce";
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -87,13 +89,14 @@ const CustomTable = (props) => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState({});
   const [changes, setChanges] = useState(false);
+  const [query, setQuery] = useState(props.query);
   const [
     devices,
     currentPage,
     totalElements,
     isFetching,
     handlePaginationChange,
-  ] = usePaginationFetch("api/device", props.query || {}, changes);
+  ] = usePaginationFetch("api/device", query || {}, changes);
 
   const [
     showCols,
@@ -104,16 +107,16 @@ const CustomTable = (props) => {
     handleDragEnter,
     handleOnDrop,
   ] = useTableColumnOrder(loc_cols, true);
-  const callback = () => {
-    setChanges(!changes);
-    setOpen(false);
-  };
   const [editDialog, cancelEdit, saveDevice, editDevice] = useEditDevice(
     selected,
     callback
   );
   const [deleteDialog, confirmDelete, cancelDelete, deleteDevice] =
     useDeleteDevice(selected.id, callback);
+  function callback() {
+    setChanges(!changes);
+    setOpen(false);
+  }
   const handleChecked = (e, col) => {
     console.log(e.target.checked);
     const tempCols2 = showCols.map((showCol) => {
@@ -135,6 +138,9 @@ const CustomTable = (props) => {
   };
   const handleClose = () => setOpen(false);
   const history = useNavigate();
+  const getFilter = debounce((values) => {
+    setQuery({ ...query, ...values });
+  }, 500);
   return (
     <Box sx={{ mt: 2 }}>
       <Container maxWidth="xl">
@@ -186,30 +192,38 @@ const CustomTable = (props) => {
               <Typography>Фильтр</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography></Typography>
+              <Filter getFilter={getFilter} />
             </AccordionDetails>
           </Accordion>
         </Box>
-        <Box
+        <Card
+          variant="outlined"
           sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
             mt: "16px",
+            px: 2,
+            py: 1,
           }}
         >
-          <Typography>{totalElements} ta</Typography>
-          {totalElements > PGNTN_LIMIT && (
-            <Pagination
-              page={currentPage}
-              onChange={(e, v) => handlePaginationChange(v)}
-              className="pagination"
-              count={Math.ceil(totalElements / PGNTN_LIMIT)}
-              variant="outlined"
-              shape="rounded"
-            />
-          )}
-        </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Typography>{totalElements} ta</Typography>
+            {totalElements > PGNTN_LIMIT && (
+              <Pagination
+                page={currentPage}
+                onChange={(e, v) => handlePaginationChange(v)}
+                className="pagination"
+                count={Math.ceil(totalElements / PGNTN_LIMIT)}
+                variant="outlined"
+                shape="rounded"
+              />
+            )}
+          </Box>
+        </Card>
         {isFetching ? (
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <CircularProgress size={100} />
@@ -219,6 +233,7 @@ const CustomTable = (props) => {
             <table>
               <thead>
                 <tr>
+                  <th>№</th>
                   {showCols &&
                     showCols
                       .filter((showCol) => showCol.show)
@@ -240,8 +255,9 @@ const CustomTable = (props) => {
               </thead>
               <tbody>
                 {devices.length !== 0 &&
-                  devices.map((row) => (
+                  devices.map((row, index) => (
                     <tr key={row.id} onClick={() => handleOpen(row)}>
+                      <td>{PGNTN_LIMIT * (currentPage - 1) + index + 1}</td>
                       {showCols &&
                         showCols
                           .filter((col) => col.show)
