@@ -55,19 +55,32 @@ const EditDeviceFormDialog = (props) => {
   };
   useEffect(() => {
     getData(`api/device/${props.data.id}`).then((res) => {
-      setValues(res.data);
+      let data = res.data;
+      [
+        "sim_number",
+        "full_address",
+        "phone_number",
+        "communication_number",
+        "full_name",
+      ].forEach((pr) => {
+        if (data[pr] === null) data[pr] = "";
+      });
+      setValues(data);
       setBranch(branches.find((br) => br.value === res.data.branch));
-      getData(`api/district/?p=1&page_size=15&region=${res.data.region}`).then(
-        (res) => {
+      if (res.data.region) {
+        getData(
+          `api/district/?p=1&page_size=15&region=${res.data.region}`
+        ).then((res) => {
           setDistricts(res.data.results);
-        }
-      );
-      getData(`api/region/${res.data.region}/`).then((res) => {
-        setRegion(res.data);
-      });
-      getData(`api/district/${res.data.district}/`).then((res) => {
-        setDistrict(res.data);
-      });
+        });
+        getData(`api/region/${res.data.region}/`).then((res) => {
+          setRegion(res.data);
+        });
+      }
+      res.data.district &&
+        getData(`api/district/${res.data.district}/`).then((res) => {
+          setDistrict(res.data);
+        });
     });
   }, [props.data.id]);
 
@@ -220,7 +233,10 @@ const EditDeviceFormDialog = (props) => {
           </Grid>
         </Box>
       </DialogContent>
-      <DialogActions className='edit-device-footer' sx={{ justifyContent: "space-between", p: "16px 24px" }}>
+      <DialogActions
+        className="edit-device-footer"
+        sx={{ justifyContent: "space-between", p: "16px 24px" }}
+      >
         <FormControlLabel
           label={`Статус: ${values.is_registered ? "Активный" : "Неактивный"}`}
           control={

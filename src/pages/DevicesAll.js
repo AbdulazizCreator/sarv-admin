@@ -1,9 +1,9 @@
 import React from "react";
-import CustomTable from "../comps/CustomTable";
+import Devices from "../comps/Devices";
 import { SHOW_COLS } from "../const";
 
 const DevicesAll = () => {
-  return <CustomTable query={{}} show_cols_name={SHOW_COLS}/>;
+  return <Devices query={{}} show_cols_name={SHOW_COLS}/>;
 };
 
 export default DevicesAll;

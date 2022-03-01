@@ -50,7 +50,9 @@ const Filter = (props) => {
           >
             <MenuItem value="">Все</MenuItem>
             {standard_sizes.map((size) => (
-              <MenuItem key={size} value={size}>{size}</MenuItem>
+              <MenuItem key={size} value={size}>
+                {size}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -67,9 +69,11 @@ const Filter = (props) => {
             onChange={handleFilter}
           >
             <MenuItem value="">Все</MenuItem>
-            {Object.keys(regions).length !== 0 &&
+            {regions.length !== 0 &&
               regions.map((item) => (
-                <MenuItem value={item.id}>{item.region}</MenuItem>
+                <MenuItem key={item.id} value={item.id}>
+                  {item.region}
+                </MenuItem>
               ))}
           </Select>
         </FormControl>

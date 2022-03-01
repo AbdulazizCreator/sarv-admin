@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getData } from "../api/common";
 
 const useFetch = (url) => {
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(true);

@@ -69,7 +69,7 @@ const SpecificDeviceTable = (props) => {
                     onDragOver={handleDragOver}
                     onDrop={handleOnDrop}
                     onDragEnter={handleDragEnter}
-                    dragover={col === dragOver ? true : false}
+                    dragover={col === dragOver ? "true" : "false"}
                   >
                     {columnsName[col.name]}
                   </th>
@@ -84,7 +84,9 @@ const SpecificDeviceTable = (props) => {
                       showCols.map((showCol) => (
                         <td
                           key={showCol.id}
-                          dragover={showCol.name === dragOver ? true : false}
+                          dragover={
+                            showCol.name === dragOver ? "true" : "false"
+                          }
                         >
                           {row[showCol.name]}
                         </td>

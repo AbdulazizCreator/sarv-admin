@@ -13,28 +13,10 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import { PGNTN_LIMIT } from "../const";
 import usePaginationFetch from "./../hooks/usePaginationFetch";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import LoadingButton from "@mui/lab/LoadingButton";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
-import DownloadingOutlinedIcon from "@mui/icons-material/DownloadingOutlined";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import CircularProgress from "@mui/material/CircularProgress";
-import { Button, Card } from "@mui/material";
-import EditDeviceFormDialog from "./EditDeviceFormDialog";
+import { Card } from "@mui/material";
 import useTableColumnOrder from "../hooks/useTableColumnOrder";
-import useEditDevice from "./../hooks/useEditDevice";
-import useDeleteDevice from "./../hooks/useDeleteDevice";
 import lan from "../const/languages/lan";
-import { useNavigate } from "react-router-dom";
 import Filter from "./Filter";
 import debounce from "lodash.debounce";
 
@@ -67,9 +49,10 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderTop: "1px solid rgba(0, 0, 0, .125)",
 }));
 
+const columns = lan.deviceProperties.visible;
+const cols = Object.keys(columns);
+
 const CustomTable = (props) => {
-  const columns = lan.deviceProperties.visible;
-  const cols = Object.keys(columns);
   let loc_cols;
   if (JSON.parse(localStorage.getItem(props.show_cols_name))) {
     loc_cols = JSON.parse(localStorage.getItem(props.show_cols_name));
@@ -86,9 +69,6 @@ const CustomTable = (props) => {
       return { id: idx, name: col, show: true };
     });
   }
-  const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState({});
-  const [changes, setChanges] = useState(false);
   const [query, setQuery] = useState(props.query);
   const [
     devices,
@@ -96,7 +76,7 @@ const CustomTable = (props) => {
     totalElements,
     isFetching,
     handlePaginationChange,
-  ] = usePaginationFetch("api/device", query || {}, changes);
+  ] = usePaginationFetch("api/device", query || {}, props.changes);
 
   const [
     showCols,
@@ -107,16 +87,7 @@ const CustomTable = (props) => {
     handleDragEnter,
     handleOnDrop,
   ] = useTableColumnOrder(loc_cols, true);
-  const [editDialog, cancelEdit, saveDevice, editDevice] = useEditDevice(
-    selected,
-    callback
-  );
-  const [deleteDialog, confirmDelete, cancelDelete, deleteDevice] =
-    useDeleteDevice(selected.id, callback);
-  function callback() {
-    setChanges(!changes);
-    setOpen(false);
-  }
+
   const handleChecked = (e, col) => {
     console.log(e.target.checked);
     const tempCols2 = showCols.map((showCol) => {
@@ -133,262 +104,143 @@ const CustomTable = (props) => {
     localStorage.setItem(props.show_cols_name, JSON.stringify(tempCols2));
   };
   const handleOpen = (device) => {
-    setOpen(true);
-    setSelected(device);
+    props.setIsOpen(true);
+    props.setSelected(device);
   };
-  const handleClose = () => setOpen(false);
-  const history = useNavigate();
+
   const getFilter = debounce((values) => {
     setQuery({ ...query, ...values });
   }, 500);
+  console.log("CustomTable");
   return (
-    <Box sx={{ mt: 2 }}>
-      <Container maxWidth="xl">
-        <Box>
-          <Accordion>
-            <AccordionSummary
-              aria-controls="panel1d-content"
-              id="panel1d-header"
-            >
-              <Typography>Вкладки таблицы</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>
-                {cols.length !== 0 &&
-                  cols.map((col, index) => (
-                    <FormControlLabel
-                      sx={{ backgroundColor: "#ddd", pr: "5px", mb: "5px" }}
-                      key={index}
-                      control={
-                        <Checkbox
-                          sx={{
-                            color: "",
-                            "&.Mui-checked": {
-                              color: "black",
-                            },
-                            padding: "3px",
-                          }}
-                          size="small"
-                          checked={
-                            showCols &&
-                            showCols.find((showCol) => showCol.name === col)
-                              .show
-                          }
-                          onChange={(e) => handleChecked(e, col)}
-                          inputProps={{ "aria-label": "controlled" }}
-                        />
-                      }
-                      label={columns[col]}
-                    />
-                  ))}
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              aria-controls="panel2d-content"
-              id="panel2d-header"
-            >
-              <Typography>Фильтр</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Filter getFilter={getFilter} />
-            </AccordionDetails>
-          </Accordion>
-        </Box>
-        <Card
-          variant="outlined"
+    <Container maxWidth="xl">
+      <Box>
+        <Accordion>
+          <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+            <Typography>Вкладки таблицы</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>
+              {cols.length !== 0 &&
+                cols.map((col, index) => (
+                  <FormControlLabel
+                    sx={{ backgroundColor: "#ddd", pr: "5px", mb: "5px" }}
+                    key={index}
+                    control={
+                      <Checkbox
+                        sx={{
+                          color: "",
+                          "&.Mui-checked": {
+                            color: "black",
+                          },
+                          padding: "3px",
+                        }}
+                        size="small"
+                        checked={
+                          showCols &&
+                          showCols.find((showCol) => showCol.name === col).show
+                        }
+                        onChange={(e) => handleChecked(e, col)}
+                        inputProps={{ "aria-label": "controlled" }}
+                      />
+                    }
+                    label={columns[col]}
+                  />
+                ))}
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
+            <Typography>Фильтр</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Filter getFilter={getFilter} />
+          </AccordionDetails>
+        </Accordion>
+      </Box>
+      <Card
+        variant="outlined"
+        sx={{
+          mt: "16px",
+          px: 2,
+          py: 1,
+        }}
+      >
+        <Box
           sx={{
-            mt: "16px",
-            px: 2,
-            py: 1,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Typography>{totalElements} ta</Typography>
-            {totalElements > PGNTN_LIMIT && (
-              <Pagination
-                page={currentPage}
-                onChange={(e, v) => handlePaginationChange(v)}
-                className="pagination"
-                count={Math.ceil(totalElements / PGNTN_LIMIT)}
-                variant="outlined"
-                shape="rounded"
-              />
-            )}
-          </Box>
-        </Card>
-        {isFetching ? (
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <CircularProgress size={100} />
-          </Box>
-        ) : (
-          <div className="custom-table">
-            <table>
-              <thead>
-                <tr>
-                  <th>№</th>
-                  {showCols &&
-                    showCols
-                      .filter((showCol) => showCol.show)
-                      .map((col) => (
-                        <th
-                          id={col.name}
-                          key={col.name}
-                          draggable
-                          onDragStart={handleDragStart}
-                          onDragOver={handleDragOver}
-                          onDrop={handleOnDrop}
-                          onDragEnter={handleDragEnter}
-                          dragover={col.name === dragOver ? true : false}
-                        >
-                          {columns[col.name]}
-                        </th>
-                      ))}
-                </tr>
-              </thead>
-              <tbody>
-                {devices.length !== 0 &&
-                  devices.map((row, index) => (
-                    <tr key={row.id} onClick={() => handleOpen(row)}>
-                      <td>{PGNTN_LIMIT * (currentPage - 1) + index + 1}</td>
-                      {showCols &&
-                        showCols
-                          .filter((col) => col.show)
-                          .map((showCol) => (
-                            <td
-                              key={showCol.id}
-                              dragover={
-                                showCol.name === dragOver ? true : false
-                              }
-                            >
-                              {row[showCol.name]}
-                            </td>
-                          ))}
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </Container>
-      <Dialog
-        open={open}
-        scroll="paper"
-        fullScreen
-        aria-labelledby="scroll-dialog-title"
-        aria-describedby="scroll-dialog-description"
-        className="device-modal"
-      >
-        <DialogTitle id="scroll-dialog-title" sx={{ p: 2 }}>
-          Серийный номер счетчика: {selected.communication_number}
-          <IconButton
-            aria-label="close"
-            variant="contained"
-            onClick={handleClose}
-            color="error"
-            sx={{
-              position: "absolute",
-              right: 8,
-              top: 12,
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent dividers sx={{ p: 0 }}>
-          <List component="nav" aria-label="mailbox folders">
-            {cols.map((device_property) => (
-              <ListItem
-                divider
-                key={device_property}
-                sx={{ my: 0, display: "flex", justifyContent: "space-between" }}
-              >
-                <Typography>{columns[device_property]}</Typography>
-                <Typography>{selected[device_property]}</Typography>
-              </ListItem>
-            ))}
-          </List>
-        </DialogContent>
-        <DialogActions sx={{ p: 2 }}>
-          <LoadingButton
-            loading={false}
-            onClick={() => deleteDevice()}
-            loadingPosition="start"
-            startIcon={<DeleteIcon />}
-            variant="contained"
-            size="large"
-            color="error"
-          >
-            <span className="access-name">Удалить</span>
-          </LoadingButton>
-          <LoadingButton
-            loading={false}
-            onClick={() => editDevice(selected)}
-            loadingPosition="start"
-            startIcon={<EditOutlinedIcon />}
-            variant="contained"
-            size="large"
-          >
-            <span className="access-name">Изменит</span>
-          </LoadingButton>
-          <LoadingButton
-            loading={false}
-            loadingPosition="start"
-            startIcon={<SettingsOutlinedIcon />}
-            variant="contained"
-            size="large"
-            color="warning"
-          >
-            <span className="access-name">Настройки</span>
-          </LoadingButton>
-          <LoadingButton
-            loading={false}
-            loadingPosition="start"
-            startIcon={<ChevronRightOutlinedIcon />}
-            variant="contained"
-            size="large"
-            color="secondary"
-            onClick={() => history(`/devices/${selected.id}`)}
-          >
-            <span className="access-name">Данные</span>
-          </LoadingButton>
-          <LoadingButton
-            loading={false}
-            loadingPosition="start"
-            startIcon={<DownloadingOutlinedIcon />}
-            variant="contained"
-            size="large"
-            color="success"
-          >
-            <span className="access-name">Выгрузка</span>
-          </LoadingButton>
-        </DialogActions>
-      </Dialog>
-      <Dialog open={deleteDialog} aria-labelledby="draggable-dialog-title">
-        <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
-          Вы хотите удалить это устройство?
-        </DialogTitle>
-        <DialogActions>
-          <Button onClick={cancelDelete}>Нет</Button>
-          <Button onClick={confirmDelete}>Да</Button>
-        </DialogActions>
-      </Dialog>
-      {selected.id && (
-        <EditDeviceFormDialog
-          editDialog={editDialog}
-          saveDevice={saveDevice}
-          cancelEdit={cancelEdit}
-          data={selected}
-        />
+          <Typography>{totalElements} ta</Typography>
+          {totalElements > PGNTN_LIMIT && (
+            <Pagination
+              page={currentPage}
+              onChange={(e, v) => handlePaginationChange(v)}
+              className="pagination"
+              count={Math.ceil(totalElements / PGNTN_LIMIT)}
+              variant="outlined"
+              shape="rounded"
+            />
+          )}
+        </Box>
+      </Card>
+      {isFetching ? (
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <CircularProgress size={100} />
+        </Box>
+      ) : (
+        <div className="custom-table">
+          <table>
+            <thead>
+              <tr>
+                <th>№</th>
+                {showCols &&
+                  showCols
+                    .filter((showCol) => showCol.show)
+                    .map((col) => (
+                      <th
+                        id={col.name}
+                        key={col.name}
+                        draggable
+                        onDragStart={handleDragStart}
+                        onDragOver={handleDragOver}
+                        onDrop={handleOnDrop}
+                        onDragEnter={handleDragEnter}
+                        dragover={col.name === dragOver ? "true" : "false"}
+                      >
+                        {columns[col.name]}
+                      </th>
+                    ))}
+              </tr>
+            </thead>
+            <tbody>
+              {devices.length !== 0 &&
+                devices.map((row, index) => (
+                  <tr key={row.id} onClick={() => handleOpen(row)}>
+                    <td>{PGNTN_LIMIT * (currentPage - 1) + index + 1}</td>
+                    {showCols &&
+                      showCols
+                        .filter((col) => col.show)
+                        .map((showCol) => (
+                          <td
+                            key={showCol.id}
+                            dragover={
+                              showCol.name === dragOver ? "true" : "false"
+                            }
+                          >
+                            {row[showCol.name]}
+                          </td>
+                        ))}
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
       )}
-    </Box>
+    </Container>
   );
 };
 

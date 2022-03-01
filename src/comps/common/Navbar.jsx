@@ -165,12 +165,7 @@ const Navbar = () => {
               className="navbar"
             >
               {pages.map((page, index) => (
-                <ListItem
-                  end
-                  component={NavLink}
-                  to={page.url}
-                  key={page.url}
-                >
+                <ListItem end component={NavLink} to={page.url} key={page.url}>
                   <ListItemText primary={page.name} />
                 </ListItem>
               ))}
@@ -200,14 +195,13 @@ const Navbar = () => {
             >
               <MenuItem
                 onClick={handleCloseUserMenu}
-                button
                 end
                 component={NavLink}
                 to="/profile"
               >
                 <Typography textAlign="center">Профиль</Typography>
               </MenuItem>
-              <MenuItem onClick={logout} button>
+              <MenuItem onClick={logout}>
                 <Typography textAlign="center">Выйти</Typography>
               </MenuItem>
             </Menu>

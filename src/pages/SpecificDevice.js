@@ -47,7 +47,6 @@ const SpecificDevice = (props) => {
   const handleChangeIndex = (index) => {
     setValue(index);
   };
-  console.log(data);
   return (
     <Container maxWidth="xl" sx={{ pt: 4 }}>
       <Box sx={{ backgroundColor: "white", py: 2, mb: 2 }}>
