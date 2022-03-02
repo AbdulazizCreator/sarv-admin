@@ -12,13 +12,12 @@ const Users = () => {
   const getValues = (values) => {
     console.log(values);
   };
+  const openDialog = () => {
+    setAddDialog(true);
+  };
   return (
     <Container maxWidth="xl" sx={{ mt: 2 }}>
-      <UsersTree
-        handleFocusNode={handleFocusNode}
-        addDialog={addDialog}
-        setAddDialog={setAddDialog}
-      />
+      <UsersTree handleFocusNode={handleFocusNode} openDialog={openDialog} />
       <AddUserDialog
         getValues={getValues}
         addDialog={addDialog}

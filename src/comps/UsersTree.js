@@ -47,6 +47,7 @@ const StyledTreeItem = (props) => {
     labelIcon: PersonOutlineOutlinedIcon,
     labelInfo,
     labelText,
+    openDialog,
     ...other
   } = props;
 
@@ -75,8 +76,8 @@ const StyledTreeItem = (props) => {
             </Typography>
           </Box>
           <Typography variant="caption" color="inherit" sx={{ zIndex: 100 }}>
-            <IconButton color="success">
-              <PersonAddAltOutlinedIcon onClick={props.setAddDialog} />
+            <IconButton onClick={openDialog} color="success">
+              <PersonAddAltOutlinedIcon />
             </IconButton>
             <IconButton color="error">
               <PersonRemoveOutlinedIcon />
@@ -121,19 +122,19 @@ function flatten(array, depth) {
 
 const flatData = flatten(users.results, 1);
 
-const UsersTree = (props) => {
-  console.log("UsersTree");
+const UsersTree = ({ handleFocusNode, openDialog }) => {
+
   return (
     <Card sx={{ p: 2, overflowX: "auto" }} className="Users">
       <TreeView
         aria-label="gmail"
-        onNodeSelect={props.handleFocusNode}
+        onNodeSelect={handleFocusNode}
         defaultCollapseIcon={<ArrowDropDownIcon className="tree-icon" />}
         defaultExpandIcon={<ArrowRightIcon className="tree-icon" />}
         defaultEndIcon={<div style={{ width: 24, fontSize: "25px" }} />}
         sx={{ flexGrow: 1, minWidth: 700, overflowY: "auto" }}
       >
-        <Tree data={flatData} setAddDialog={() => props.setAddDialog(true)} />
+        <Tree data={flatData} openDialog={openDialog} />
       </TreeView>
     </Card>
   );
@@ -153,7 +154,7 @@ const Tree = (props) => {
             nodeId={"" + user.id}
             labelText={user.username.toUpperCase()}
             labelIcon={PersonOutlineOutlinedIcon}
-            setAddDialog={props.setAddDialog}
+            openDialog={props.openDialog}
             sx={{
               [`& .${treeItemClasses.group}`]: {
                 marginLeft: 0,

@@ -22,14 +22,10 @@ const SpecificDeviceTable = (props) => {
     handleDragEnter,
     handleOnDrop,
   ] = useTableColumnOrder(cols);
-  const [
-    hourlyData,
-    hourlyCurrentPage,
-    hourlyDataNumber,
-    hourlyIsFetching,
-    hourlyHandlePagination,
-  ] = usePaginationFetch(props.url, props.query, changes);
-  console.log(hourlyData);
+  
+  const [data, currentPage, dataNumber, isFetching, handlePagination] =
+    usePaginationFetch(props.url, props.query, changes);
+
   return (
     <Box>
       <Box
@@ -40,18 +36,18 @@ const SpecificDeviceTable = (props) => {
           mt: "16px",
         }}
       >
-        {hourlyDataNumber.length > PGNTN_LIMIT && (
+        {dataNumber.length > PGNTN_LIMIT && (
           <Pagination
-            page={hourlyCurrentPage}
-            onChange={(e, v) => hourlyHandlePagination(v)}
+            page={currentPage}
+            onChange={(e, v) => handlePagination(v)}
             className="pagination"
-            count={Math.ceil(hourlyDataNumber / PGNTN_LIMIT)}
+            count={Math.ceil(dataNumber / PGNTN_LIMIT)}
             variant="outlined"
             shape="rounded"
           />
         )}
       </Box>
-      {hourlyIsFetching ? (
+      {isFetching ? (
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <CircularProgress size={100} />
         </Box>
@@ -77,8 +73,8 @@ const SpecificDeviceTable = (props) => {
               </tr>
             </thead>
             <tbody>
-              {hourlyData.length !== 0 &&
-                hourlyData.map((row) => (
+              {data.length !== 0 &&
+                data.map((row) => (
                   <tr key={row.id}>
                     {showCols &&
                       showCols.map((showCol) => (

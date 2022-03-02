@@ -30,7 +30,12 @@ const names = [
 ];
 
 const AddUserDialog = (props) => {
-  const [values, setValues] = useState({});
+  const [values, setValues] = useState({
+    username: "",
+    phone_number: "",
+    full_name: "",
+    full_address: "",
+  });
   const [region, setRegion] = useState(null);
   const [district, setDistrict] = useState(null);
   const [regions] = useFetch("api/region/?limit=15");
@@ -47,6 +52,7 @@ const AddUserDialog = (props) => {
   };
 
   const editUser = () => {};
+
   const handleChecked = (name) => {
     if (personName.includes(name)) {
       setPersonName((personName) => personName.filter((item) => item !== name));
@@ -54,7 +60,7 @@ const AddUserDialog = (props) => {
       setPersonName([...personName, name]);
     }
   };
-
+  console.log("AddUserDialog");
   return (
     <Dialog maxWidth="md" open={props.addDialog}>
       <DialogContent>
@@ -64,7 +70,6 @@ const AddUserDialog = (props) => {
               margin="dense"
               value={values.username}
               onChange={handleChange}
-              id="username"
               name="username"
               label="Имя пользователь"
               fullWidth
@@ -73,7 +78,6 @@ const AddUserDialog = (props) => {
               margin="dense"
               value={values.full_name}
               onChange={handleChange}
-              id="full_name"
               name="full_name"
               label="Наименование абонента"
               fullWidth
@@ -83,7 +87,7 @@ const AddUserDialog = (props) => {
               onChange={handleChange}
               label="Телефон номер"
               name="phone_number"
-              id="phone_number"
+              fullWidth
             />
             <TextField
               margin="dense"
@@ -91,11 +95,9 @@ const AddUserDialog = (props) => {
               value={values.full_address}
               onChange={handleChange}
               name="full_address"
-              id="full_address"
               fullWidth
             />
             <Autocomplete
-              id="free-solo-demo"
               options={regions}
               value={region}
               getOptionLabel={(option) => option.region}
@@ -117,7 +119,6 @@ const AddUserDialog = (props) => {
               )}
             />
             <Autocomplete
-              id="free-solo-demo"
               options={districts}
               disabled={region ? false : true}
               value={district}
