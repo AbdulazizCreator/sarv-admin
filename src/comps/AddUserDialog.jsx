@@ -12,9 +12,10 @@ import {
   MenuItem,
   TextField,
 } from "@mui/material";
-import useFetch from "../hooks/useFetch";
-import PhoneNumberInput from "./PhoneNumberInput";
+
 import { getData } from "../api/common";
+import useFetch from "../hooks/useFetch";
+import { PhoneNumberInput } from "./common";
 
 const names = [
   "Oliver Hansen",
@@ -36,6 +37,7 @@ const AddUserDialog = (props) => {
     full_name: "",
     full_address: "",
   });
+
   const [region, setRegion] = useState(null);
   const [district, setDistrict] = useState(null);
   const [regions] = useFetch("api/region/?limit=15");
@@ -47,6 +49,7 @@ const AddUserDialog = (props) => {
       ...values,
       [event.target.name]: event.target.value,
     };
+
     setValues(data);
     props.getValues(data);
   };

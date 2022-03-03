@@ -34,4 +34,4 @@ const PhoneNumberInput = (props) => {
   );
 };
 
-export default PhoneNumberInput;
+export default React.memo(PhoneNumberInput);

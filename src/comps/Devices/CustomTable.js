@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "../style/CustomTable.scss";
 import Container from "@mui/material/Container";
 import { styled } from "@mui/material/styles";
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
@@ -11,12 +10,12 @@ import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import { PGNTN_LIMIT } from "../const";
-import usePaginationFetch from "./../hooks/usePaginationFetch";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Card } from "@mui/material";
-import useTableColumnOrder from "../hooks/useTableColumnOrder";
-import lan from "../const/languages/lan";
+import { PGNTN_LIMIT } from "../../const";
+import usePaginationFetch from "../../hooks/usePaginationFetch";
+import useTableColumnOrder from "../../hooks/useTableColumnOrder";
+import lan from "../../const/languages/lan";
 import Filter from "./Filter";
 import debounce from "lodash.debounce";
 

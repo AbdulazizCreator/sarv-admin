@@ -1,7 +1,7 @@
 export const TOKEN = "SARVADMINTOKEN";
 export const SHOW_COLS = "SHOW_COLS";
 export const LANG = "SARF_LANGUAGE";
-export const DOMAIN = "https://blatnoy.pythonanywhere.com";
+export const DOMAIN = "https://api3.sarf.uz";
 export const API = `${DOMAIN}/`;
 export const PGNTN_LIMIT = 3;
 export const SHOW_COLS_LEGAL = "SHOW_COLS_LEGAL";

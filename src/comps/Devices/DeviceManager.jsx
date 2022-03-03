@@ -1,5 +1,4 @@
 import React from "react";
-import "../style/CustomTable.scss";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -14,12 +13,12 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import { Button } from "@mui/material";
 import EditDeviceFormDialog from "./EditDeviceFormDialog";
-import useEditDevice from "./../hooks/useEditDevice";
-import useDeleteDevice from "./../hooks/useDeleteDevice";
-import lan from "../const/languages/lan";
+import useEditDevice from "../../hooks/useEditDevice";
+import useDelete from "../../hooks/useDelete";
+import lan from "../../const/languages/lan";
 import { useNavigate } from "react-router-dom";
+import { DeleteDialog } from "../common";
 
 const DeviceManager = (props) => {
   const columns = lan.deviceProperties.visible;
@@ -29,8 +28,9 @@ const DeviceManager = (props) => {
     props.selected,
     props.callback
   );
-  const [deleteDialog, confirmDelete, cancelDelete, deleteDevice] =
-    useDeleteDevice(props.selected.id, props.callback);
+  const [deleteDialog, confirmDelete, cancelDelete, doWantDelete] = useDelete(
+    props.callback
+  );
 
   const handleClose = () => props.setIsOpen(false);
   const history = useNavigate();
@@ -77,7 +77,7 @@ const DeviceManager = (props) => {
         <DialogActions sx={{ p: 2 }}>
           <LoadingButton
             loading={false}
-            onClick={() => deleteDevice()}
+            onClick={(e) => doWantDelete(e, `api/device/${props.selected.id}/`)}
             loadingPosition="start"
             startIcon={<DeleteIcon />}
             variant="contained"
@@ -129,15 +129,12 @@ const DeviceManager = (props) => {
           </LoadingButton>
         </DialogActions>
       </Dialog>
-      <Dialog open={deleteDialog} aria-labelledby="draggable-dialog-title">
-        <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
-          Вы хотите удалить это устройство?
-        </DialogTitle>
-        <DialogActions>
-          <Button onClick={cancelDelete}>Нет</Button>
-          <Button onClick={confirmDelete}>Да</Button>
-        </DialogActions>
-      </Dialog>
+      <DeleteDialog
+        title="Вы хотите удалить это устройство ?"
+        deleteDialog={deleteDialog}
+        cancelDelete={cancelDelete}
+        confirmDelete={confirmDelete}
+      />
       {props.selected.id && (
         <EditDeviceFormDialog
           editDialog={editDialog}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import PhoneNumberInput from "./PhoneNumberInput";
+import { PhoneNumberInput } from "../common";
 import { Autocomplete } from "@mui/material";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
@@ -18,8 +18,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Button } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
-import useFetch from "./../hooks/useFetch";
-import { getData } from "../api/common";
+import useFetch from "../../hooks/useFetch";
+import { getData } from "../../api/common";
 
 const names = [
   "Oliver Hansen",

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import "../style/CustomTable.scss";
 import Box from "@mui/material/Box";
 import DeviceManager from "./DeviceManager";
 import CustomTable from "./CustomTable";
+import '../../style/CustomTable.scss'
 
 const Devices = (props) => {
   const [isOpen, setIsOpen] = useState(false);
