@@ -44,7 +44,7 @@ const Filter = (props) => {
 
   return (
     <Grid container spacing={2}>
-      <Grid item lg={2} sm={6} xs={12}>
+      <Grid item lg={2} sm={12} xs={12}>
         <TextField
           id="outlined-search"
           label="Поиск"
@@ -54,7 +54,7 @@ const Filter = (props) => {
           fullWidth
         />
       </Grid>
-      <Grid item lg={2} sm={12} xs={12}>
+      <Grid item lg={2} sm={6} xs={12}>
         <FormControl fullWidth>
           <InputLabel id="standard_size">Типоразмер счетчика</InputLabel>
           <Select
