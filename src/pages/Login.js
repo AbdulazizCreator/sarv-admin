@@ -66,7 +66,7 @@ const Login = () => {
       // sending data for login
       postData("login/", values)
         .then((res) => {
-          setCookie(TOKEN, res.data.jwt);
+          setCookie(TOKEN, res.data.access_token);
           window.location.href = "/";
         })
         .finally(() => {

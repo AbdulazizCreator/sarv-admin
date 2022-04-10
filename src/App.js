@@ -90,7 +90,7 @@ function App() {
             }
           ></Route>
           <Route path="login" element={<Login />} />
-          {!isLoggedIn && (
+          {isLoggedIn && (
             <Route path="/">
               {pages.map((page, index) => (
                 <Route

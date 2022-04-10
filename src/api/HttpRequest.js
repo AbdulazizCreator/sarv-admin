@@ -11,7 +11,8 @@ export const HttpRequest = (config = null) => {
   const headers = {
     "X-Requested-With": "XMLHttpRequest",
     "Content-Type": "application/json; charset=utf-8",
-    Authorization: token ? `${token}` : "",
+    // Authorization: token ? `${token}` : "",
+    Authorization: token && "",
   };
 
   const axiosInstance = axios.create({
@@ -35,7 +36,7 @@ export const HttpRequest = (config = null) => {
             return Promise.reject(error);
           }
           if (error.response.status === 403) {
-            logout();
+            // logout();
             toast.error(error.response.data.detail);
             return Promise.reject(error);
           }
