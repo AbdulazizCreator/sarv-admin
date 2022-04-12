@@ -1,18 +1,18 @@
 import axios from "axios";
-import { API, TOKEN } from "../const";
-import { getCookie } from "../utils/cookies.js";
+import { API } from "../const";
+// import { getCookie } from "../utils/cookies.js";
 import { logout } from "../utils/logout";
 import { toast } from "react-toastify";
 
 const host = API;
 
 export const HttpRequest = (config = null) => {
-  const token = getCookie(TOKEN);
+  // const token = getCookie(TOKEN);
   const headers = {
     "X-Requested-With": "XMLHttpRequest",
     "Content-Type": "application/json; charset=utf-8",
     // Authorization: token ? `${token}` : "",
-    Authorization: token && "",
+    Authorization: "",
   };
 
   const axiosInstance = axios.create({
