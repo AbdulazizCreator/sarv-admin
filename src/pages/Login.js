@@ -78,8 +78,8 @@ const Login = () => {
 
   return (
     <Box>
-      <Grid container className="login">
-        <Grid className="login-img-box" item lg={7} md={6} sm={0} xs={0}>
+      <Grid container className="login" sx={{ justifyContent: "center" }}>
+        {/* <Grid className="login-img-box" item lg={7} md={6} sm={0} xs={0}>
           <Grid
             sx={{ height: "100%" }}
             container
@@ -95,8 +95,9 @@ const Login = () => {
               финал
             </p>
           </Grid>
-        </Grid>
-        <Grid item lg={5} md={6} sm={12} xs={12}>
+        </Grid> */}
+        {/* <Grid item lg={5} md={6} sm={12} xs={12}> */}
+        <Grid item lg={6} md={8} sm={12} xs={12}>
           <div className="login-form">
             <Grid
               container
