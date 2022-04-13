@@ -7,6 +7,7 @@ const DevicesPhysical = () => {
     <Devices
       query={{ hudud_fiz_reged: "True" }}
       show_cols_name={SHOW_COLS_PHYSICAL}
+      name="physical"
     />
   );
 };

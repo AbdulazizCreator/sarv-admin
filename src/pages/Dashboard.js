@@ -4,7 +4,7 @@ import Container from "@mui/material/Container";
 const Dashboard = () => {
   return (
     <div>
-      <Container maxWidth="xl">Dashboard</Container>
+      <Container maxWidth="false">Dashboard</Container>
     </div>
   );
 };

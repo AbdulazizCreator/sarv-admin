@@ -48,7 +48,7 @@ const SpecificDevice = (props) => {
     setValue(index);
   };
   return (
-    <Container maxWidth="xl" sx={{ pt: 4 }}>
+    <Container maxWidth="false" sx={{ pt: 4 }}>
       <Box sx={{ backgroundColor: "white", py: 2, mb: 2 }}>
         {loading ? (
           <Box>
@@ -116,7 +116,6 @@ const SpecificDevice = (props) => {
             columns={lan.specialDeviceProperties.hourly}
             query={{ device: id }}
           />
-          ;
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           <SpecificDeviceTable
@@ -124,7 +123,6 @@ const SpecificDevice = (props) => {
             columns={lan.specialDeviceProperties.daily}
             query={{ device: id }}
           />
-          ;
         </TabPanel>
       </SwipeableViews>
     </Container>

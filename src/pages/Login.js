@@ -52,7 +52,8 @@ const Login = () => {
     event.preventDefault();
   };
 
-  const login = () => {
+  const login = (e) => {
+    e.preventDefault();
     // checking form fields are valid or invalid
     if (!values.username) {
       setValid({ ...valid, username: true });
@@ -111,91 +112,96 @@ const Login = () => {
               </Avatar>
               <h1>Войти в систему</h1>
             </Grid>
-            <FormControl
-              error={valid.username}
-              sx={{ mb: 3 }}
-              fullWidth
-              variant="outlined"
-            >
-              <InputLabel htmlFor="input-with-icon-adornment">
-                Имя пользователя
-              </InputLabel>
-              <OutlinedInput
-                id="input-with-icon-adornment"
-                onChange={handleChange("username")}
-                startAdornment={
-                  <InputAdornment position="start">
-                    <AccountCircleOutlinedIcon />
-                  </InputAdornment>
-                }
-                label="Имя пользователя"
-              />
-              {valid.username && (
-                <FormHelperText id="component-error-text">
-                  Не заполнено
-                </FormHelperText>
-              )}
-            </FormControl>
-            <FormControl
-              error={valid.password}
-              sx={{ mb: 3 }}
-              fullWidth
-              variant="outlined"
-            >
-              <InputLabel htmlFor="outlined-adornment-password">
-                Пароль
-              </InputLabel>
-              <OutlinedInput
-                id="outlined-adornment-password"
-                type={values.showPassword ? "text" : "password"}
-                value={values.password}
-                onChange={handleChange("password")}
-                startAdornment={
-                  <InputAdornment position="start">
-                    <LockOutlinedIcon />
-                  </InputAdornment>
-                }
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                label="Пароль"
-              />
-              {valid.password && (
-                <FormHelperText id="component-error-text">
-                  Не заполнено
-                </FormHelperText>
-              )}
-            </FormControl>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  defaultChecked
-                  onChange={handleChange}
-                  inputProps={{ "aria-label": "controlled" }}
+            <form onSubmit={login}>
+              <FormControl
+                error={valid.username}
+                sx={{ mb: 3 }}
+                fullWidth
+                variant="outlined"
+              >
+                <InputLabel htmlFor="input-with-icon-adornment">
+                  Имя пользователя
+                </InputLabel>
+                <OutlinedInput
+                  id="input-with-icon-adornment"
+                  onChange={handleChange("username")}
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <AccountCircleOutlinedIcon />
+                    </InputAdornment>
+                  }
+                  label="Имя пользователя"
                 />
-              }
-              label="Запомните меня"
-            />
-
-            <LoadingButton
-              loading={isLoading}
-              sx={{ mt: 3 }}
-              fullWidth
-              variant="contained"
-              onClick={login}
-              loadingIndicator="Loading..."
-            >
-              Войти
-            </LoadingButton>
+                {valid.username && (
+                  <FormHelperText id="component-error-text">
+                    Не заполнено
+                  </FormHelperText>
+                )}
+              </FormControl>
+              <FormControl
+                error={valid.password}
+                sx={{ mb: 3 }}
+                fullWidth
+                variant="outlined"
+              >
+                <InputLabel htmlFor="outlined-adornment-password">
+                  Пароль
+                </InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={values.showPassword ? "text" : "password"}
+                  value={values.password}
+                  onChange={handleChange("password")}
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <LockOutlinedIcon />
+                    </InputAdornment>
+                  }
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {values.showPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Пароль"
+                />
+                {valid.password && (
+                  <FormHelperText id="component-error-text">
+                    Не заполнено
+                  </FormHelperText>
+                )}
+              </FormControl>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    defaultChecked
+                    onChange={handleChange}
+                    inputProps={{ "aria-label": "controlled" }}
+                  />
+                }
+                label="Запомните меня"
+              />
+              <LoadingButton
+                loading={isLoading}
+                sx={{ mt: 3 }}
+                fullWidth
+                variant="contained"
+                loadingIndicator="Loading..."
+                type="submit"
+              >
+                Войти
+              </LoadingButton>
+            </form>
           </div>
         </Grid>
       </Grid>

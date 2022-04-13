@@ -23,7 +23,7 @@ const Users = () => {
     setAddDialog(true);
   };
   return (
-    <Container maxWidth="xl" sx={{ mt: 2 }}>
+    <Container maxWidth="false" sx={{ mt: 2 }}>
       <UsersTree
         handleFocusNode={handleFocusNode}
         openDialog={openDialog}

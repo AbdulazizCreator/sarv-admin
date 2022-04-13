@@ -7,6 +7,7 @@ const DevicesLegal = () => {
     <Devices
       query={{ hudud_yur_reged: "True" }}
       show_cols_name={SHOW_COLS_LEGAL}
+      name="legal"
     />
   );
 };

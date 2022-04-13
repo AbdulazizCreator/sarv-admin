@@ -12,6 +12,9 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Card } from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 import { PGNTN_LIMIT } from "../../const";
 import usePaginationFetch from "../../hooks/usePaginationFetch";
 import useTableColumnOrder from "../../hooks/useTableColumnOrder";
@@ -68,14 +71,20 @@ const CustomTable = (props) => {
       return { id: idx, name: col, show: true };
     });
   }
-  const [query, setQuery] = useState(props.query);
+  const page_size =
+    localStorage.getItem(props.name + "_page_size") || PGNTN_LIMIT;
+  const [query, setQuery] = useState({
+    ...props.query,
+    page_size,
+  });
+  const [pageSize, setPageSize] = useState(page_size);
   const [
     devices,
     currentPage,
     totalElements,
     isFetching,
     handlePaginationChange,
-  ] = usePaginationFetch("api/device", query || {}, props.changes);
+  ] = usePaginationFetch("api/device", query || {}, props.changes, props.name);
 
   const [
     showCols,
@@ -85,7 +94,7 @@ const CustomTable = (props) => {
     handleDragOver,
     handleDragEnter,
     handleOnDrop,
-  ] = useTableColumnOrder(loc_cols, true);
+  ] = useTableColumnOrder(loc_cols, true, props.show_cols_name);
 
   const handleChecked = (e, col) => {
     console.log(e.target.checked);
@@ -110,9 +119,13 @@ const CustomTable = (props) => {
   const getFilter = debounce((values) => {
     setQuery({ ...query, ...values });
   }, 500);
-  console.log("CustomTable");
+  const getPageSize = (e) => {
+    localStorage.setItem(props.name + "_page_size", e.target.value);
+    setPageSize(e.target.value);
+    setQuery({ ...query, page_size: e.target.value });
+  };
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="false">
       <Box>
         <Accordion>
           <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
@@ -174,16 +187,38 @@ const CustomTable = (props) => {
           }}
         >
           <Typography>{totalElements} ta</Typography>
-          {totalElements > PGNTN_LIMIT && (
-            <Pagination
-              page={currentPage}
-              onChange={(e, v) => handlePaginationChange(v)}
-              className="pagination"
-              count={Math.ceil(totalElements / PGNTN_LIMIT)}
-              variant="outlined"
-              shape="rounded"
-            />
-          )}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <FormControl size="small" sx={{ mr: 1 }}>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={pageSize}
+                onChange={getPageSize}
+              >
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={20}>20</MenuItem>
+                <MenuItem value={30}>30</MenuItem>
+                <MenuItem value={40}>40</MenuItem>
+                <MenuItem value={50}>50</MenuItem>
+                <MenuItem value={100}>100</MenuItem>
+              </Select>
+            </FormControl>
+            {totalElements > page_size && (
+              <Pagination
+                page={currentPage}
+                onChange={(e, v) => handlePaginationChange(v)}
+                className="pagination"
+                count={Math.ceil(totalElements / page_size)}
+                variant="outlined"
+                shape="rounded"
+              />
+            )}
+          </Box>
         </Box>
       </Card>
       {isFetching ? (
@@ -219,7 +254,7 @@ const CustomTable = (props) => {
               {devices.length !== 0 &&
                 devices.map((row, index) => (
                   <tr key={row.id} onClick={() => handleOpen(row)}>
-                    <td>{PGNTN_LIMIT * (currentPage - 1) + index + 1}</td>
+                    <td>{page_size * (currentPage - 1) + index + 1}</td>
                     {showCols &&
                       showCols
                         .filter((col) => col.show)

@@ -7,6 +7,7 @@ const DevicesNotReg = () => {
     <Devices
       query={{ is_registered: "False" }}
       show_cols_name={SHOW_COLS_NOT_REGISTERED}
+      name="not_registered"
     />
   );
 };
