@@ -39,7 +39,7 @@ const DeviceManager = (props) => {
       <Dialog
         open={props.isOpen}
         scroll="paper"
-        fullScreen
+        // fullScreen
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
         className="device-modal"
@@ -113,7 +113,9 @@ const DeviceManager = (props) => {
             variant="contained"
             size="large"
             color="secondary"
-            onClick={() => history(`/devices/${props.selected.id}`)}
+            onClick={() =>
+              history(`/devices/${props.selected.id}`)
+            }
           >
             <span className="access-name">Данные</span>
           </LoadingButton>

@@ -114,7 +114,7 @@ const SpecificDevice = (props) => {
           <SpecificDeviceTable
             url={`api/device-hourly`}
             columns={lan.specialDeviceProperties.hourly}
-            query={{ device: id }}
+            query={{ device: data.communication_number }}
           />
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>

@@ -32,7 +32,8 @@ const SpecificDeviceTable = (props) => {
   ] = useTableColumnOrder(cols);
 
   const [data, currentPage, totalElements, isFetching, handlePagination] =
-    usePaginationFetch(props.url, query);
+    usePaginationFetch(props.url,  );
+
   const getPageSize = (e) => {
     setPageSize(e.target.value);
     setQuery({ ...query, page_size: e.target.value });

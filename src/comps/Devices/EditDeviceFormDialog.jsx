@@ -137,14 +137,14 @@ const EditDeviceFormDialog = (props) => {
                 id="free-solo-demo"
                 options={regions}
                 value={region}
-                getOptionLabel={(option) => option.region}
+                getOptionLabel={(option) => option.region_name}
                 renderOption={(props, option) => (
-                  <li {...props}> {option.region}</li>
+                  <li {...props}> {option.region_name}</li>
                 )}
                 onChange={(e, v) => {
                   setValues({ ...values, region: v && v.id });
                   setRegion(v);
-                  getData(`api/district/?p=1&page_size=15&region=${v.id}`).then(
+                  getData(`api/district/?p=1&page_size=20&region=${v.id}`).then(
                     (res) => {
                       setDistricts(res.data.results);
                     }
@@ -162,9 +162,9 @@ const EditDeviceFormDialog = (props) => {
                 options={districts}
                 disabled={region ? false : true}
                 value={district}
-                getOptionLabel={(option) => option.district}
+                getOptionLabel={(option) => option.district_name}
                 renderOption={(props, option) => (
-                  <li {...props}> {option.district}</li>
+                  <li {...props}> {option.district_name}</li>
                 )}
                 onChange={(e, v) => {
                   setValues({ ...values, district: v && v.id });
